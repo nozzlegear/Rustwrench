@@ -1,0 +1,8 @@
+source https://www.nuget.org/api/v2
+
+nuget DotEnvFile
+nuget MyCouch
+nuget Nancy
+nuget Nancy.Hosting.Self
+nuget Mono.Posix
+nuget ShopifySharp
