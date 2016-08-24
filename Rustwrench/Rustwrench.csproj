@@ -44,19 +44,38 @@
     <Reference Include="System.Configuration" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Config.cs" />
-    <Compile Include="Infrastructure\ApiNancyModule.cs" />
-    <Compile Include="Infrastructure\NancyStartup.cs" />
-    <Compile Include="Program.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Responses\AsJsonError.cs" />
-    <Compile Include="Routes\UsersRoute.cs" />
+    <Compile Include="Extensions\NancyResponse.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Helpers\Database.cs" />
+    <Compile Include="Helpers\Config.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Infrastructure\SecureRoute.cs" />
+    <Compile Include="Infrastructure\Startup.cs" />
+  </ItemGroup>
+  <ItemGroup>
     <Compile Include="Routes\WildcardRoute.cs" />
-    <Compile Include="Security\RequiresApiKey.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Models\User.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Models\Auth\SessionToken.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Models\Database\DesignDoc.cs" />
+    <Compile Include="Models\Database\DesignDocView.cs" />
+    <Compile Include="Models\Database\QueryResult.cs" />
+    <Compile Include="Models\Database\UserDatabase.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
     <None Include="paket.references" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Content\" />
@@ -74,6 +93,17 @@
       <ItemGroup>
         <Reference Include="DotEnvFile">
           <HintPath>..\packages\DotEnvFile\lib\net452\DotEnvFile.dll</HintPath>
+          <Private>True</Private>
+          <Paket>True</Paket>
+        </Reference>
+      </ItemGroup>
+    </When>
+  </Choose>
+  <Choose>
+    <When Condition="$(TargetFrameworkIdentifier) == '.NETFramework' And ($(TargetFrameworkVersion) == 'v3.5' Or $(TargetFrameworkVersion) == 'v4.0' Or $(TargetFrameworkVersion) == 'v4.5' Or $(TargetFrameworkVersion) == 'v4.5.1' Or $(TargetFrameworkVersion) == 'v4.5.2' Or $(TargetFrameworkVersion) == 'v4.5.3' Or $(TargetFrameworkVersion) == 'v4.6' Or $(TargetFrameworkVersion) == 'v4.6.1' Or $(TargetFrameworkVersion) == 'v4.6.2' Or $(TargetFrameworkVersion) == 'v4.6.3')">
+      <ItemGroup>
+        <Reference Include="JWT">
+          <HintPath>..\packages\JWT\lib\3.5\JWT.dll</HintPath>
           <Private>True</Private>
           <Paket>True</Paket>
         </Reference>

@@ -1,6 +1,7 @@
 source https://www.nuget.org/api/v2
 
 nuget DotEnvFile
+nuget jwt
 nuget MyCouch
 nuget Nancy
 nuget Nancy.Hosting.Self

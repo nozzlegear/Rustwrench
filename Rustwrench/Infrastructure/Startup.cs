@@ -10,7 +10,7 @@ namespace Rustwrench.Infrastructure
     /// <remarks>
     /// Nancy will automatically find all classes that implement IApplicationStartup and call them when Nancy starts.
     /// </remarks>
-    public class NancyStartup : IApplicationStartup
+    public class Startup : IApplicationStartup
     {
         public void Initialize(IPipelines pipelines)
         {
@@ -30,6 +30,7 @@ namespace Rustwrench.Infrastructure
                 // response by accessing the Response property of the NancyContext that is passed in.
 
                 context.Response.WithHeader("X-Powered-By", $"Rustwrench {Config.AppVersion}");
+                context.Response.WithHeader("X-Rustwrench-Version", Config.AppVersion);
             };
         }
     }

@@ -1,6 +1,7 @@
 NUGET
   remote: https://www.nuget.org/api/v2
     DotEnvFile (1.0)
+    JWT (1.3.4)
     Microsoft.CSharp (4.0.1) - framework: >= netstandard10
       System.Collections (>= 4.0.11) - framework: dnxcore50, >= netstandard13
       System.Diagnostics.Debug (>= 4.0.11) - framework: dnxcore50, >= netstandard13
