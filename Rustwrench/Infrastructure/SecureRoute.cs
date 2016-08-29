@@ -18,7 +18,7 @@ namespace Rustwrench.Infrastructure
             {
                 string headerName = Config.AuthHeaderName;
 
-                if (! ctx.Request.Headers.Keys.Any(k => k == headerName))
+                if (! ctx.Request.Headers.Keys.Any(h => h.EqualsIgnoreCase(headerName)))
                 {
                     var headers = ctx.Request.Headers.Select(h => $"{h.Key}={h.Value}");
 

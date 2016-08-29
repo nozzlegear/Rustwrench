@@ -39,7 +39,7 @@ namespace Rustwrench
 
         public static Response InvalidToken(this IResponseFormatter response)
         {
-            return response.AsJsonError("Missing or invalid X-SCI-Token header.", HttpStatusCode.Unauthorized);
+            return response.AsJsonError($"Missing or invalid {Config.AuthHeaderName} header.", HttpStatusCode.Unauthorized);
         }
 
         public static Response ShopifyAuthenticationRequired(this IResponseFormatter response)
