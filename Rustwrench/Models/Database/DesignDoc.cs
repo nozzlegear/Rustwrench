@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Newtonsoft.Json;
 
 namespace Rustwrench.Models.Database
 {
@@ -9,6 +10,7 @@ namespace Rustwrench.Models.Database
     {
         public string _id { get; set; }
 
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public string _rev { get; set; }
 
         public string language { get; } = "javascript";
