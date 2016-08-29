@@ -12,7 +12,7 @@ namespace Rustwrench.Infrastructure
     {
         public SecureRoute() : base() { }
 
-        public SecureRoute(string pathname = "") : base (pathname)
+        public SecureRoute(string pathname = "", bool requiresShopifyToken = false) : base (pathname)
         {
             Before.AddItemToStartOfPipeline(ctx =>
             {
@@ -22,7 +22,7 @@ namespace Rustwrench.Infrastructure
                 {
                     var headers = ctx.Request.Headers.Select(h => $"{h.Key}={h.Value}");
 
-                    return InvalidTokenResponse(Response);
+                    return InvalidTokenResponse();
                 }
 
                 var header = ctx.Request.Headers[headerName].FirstOrDefault();
@@ -34,17 +34,30 @@ namespace Rustwrench.Infrastructure
                 }
                 catch (JWT.SignatureVerificationException)
                 {
-                    return InvalidTokenResponse(Response);                
+                    return InvalidTokenResponse();                
                 }
                 catch (Exception e)
                 {
                     Console.WriteLine("JWT Deserialization exception: " +  e.Message);
 
-                    return InvalidTokenResponse(Response);
+                    return InvalidTokenResponse();
                 }
 
                 return null;
             });
+
+            if (requiresShopifyToken)
+            {
+                Before += (NancyContext ctx) =>
+                {
+                    if (string.IsNullOrEmpty(this.SessionToken.UserId) || string.IsNullOrEmpty(this.SessionToken.ShopifyUrl))
+                    {
+                        return ShopifyAuthenticationRequired();
+                    }
+
+                    return null;
+                };
+            }
 
             OnError += (NancyContext ctx, Exception ex) =>
             {
@@ -68,9 +81,14 @@ namespace Rustwrench.Infrastructure
             return token;
         }
 
-        public Response InvalidTokenResponse(IResponseFormatter response)
+        public Response InvalidTokenResponse()
         {
-            return response.AsJsonError("Missing or invalid X-SCI-Token header.", HttpStatusCode.Unauthorized);
+            return Response.AsJsonError("Missing or invalid X-SCI-Token header.", HttpStatusCode.Unauthorized);
+        }
+
+        public Response ShopifyAuthenticationRequired()
+        {
+            return Response.AsJsonError("Shopify OAuth integration required.", HttpStatusCode.PreconditionFailed);
         }
     }
 }
