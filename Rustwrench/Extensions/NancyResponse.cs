@@ -34,7 +34,7 @@ namespace Rustwrench
             data["rustwrench_token"] = token;
             data["rustwrench_token_payload"] = payload;
 
-            return response.AsJson(outputData).WithCookie("Rustwrench_Auth", token);
+            return response.AsJson(data).WithCookie("Rustwrench_Auth", token);
         }
 
         public static Response InvalidToken(this IResponseFormatter response)
