@@ -33,6 +33,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="netfx\System\DateTimeEpochExtensions.cs">
+      <Paket>True</Paket>
+    </Compile>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -44,6 +47,7 @@
     <Reference Include="System.Configuration" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Extensions\Strings.cs" />
     <Compile Include="Extensions\NancyResponse.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -55,6 +59,9 @@
     <Compile Include="Infrastructure\Startup.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Routes\SessionsRoute.cs" />
+    <Compile Include="Routes\ShopifyRoute.cs" />
+    <Compile Include="Routes\WebhooksRoute.cs" />
     <Compile Include="Routes\WildcardRoute.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -62,6 +69,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Models\Auth\SessionToken.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Models\Requests\Sessions\CreateSessionRequest.cs" />
+    <Compile Include="Models\Requests\Sessions\VerifySessionRequest.cs" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Models\Database\DesignDoc.cs" />
@@ -88,6 +99,17 @@
   <Target Name="AfterBuild">
   </Target>
   -->
+  <Choose>
+    <When Condition="$(TargetFrameworkIdentifier) == '.NETFramework' And ($(TargetFrameworkVersion) == 'v3.5' Or $(TargetFrameworkVersion) == 'v4.0' Or $(TargetFrameworkVersion) == 'v4.5' Or $(TargetFrameworkVersion) == 'v4.5.1' Or $(TargetFrameworkVersion) == 'v4.5.2' Or $(TargetFrameworkVersion) == 'v4.5.3' Or $(TargetFrameworkVersion) == 'v4.6' Or $(TargetFrameworkVersion) == 'v4.6.1' Or $(TargetFrameworkVersion) == 'v4.6.2' Or $(TargetFrameworkVersion) == 'v4.6.3')">
+      <ItemGroup>
+        <Reference Include="BCrypt.Net">
+          <HintPath>..\packages\BCrypt.Net\lib\net35\BCrypt.Net.dll</HintPath>
+          <Private>True</Private>
+          <Paket>True</Paket>
+        </Reference>
+      </ItemGroup>
+    </When>
+  </Choose>
   <Choose>
     <When Condition="$(TargetFrameworkIdentifier) == '.NETFramework' And ($(TargetFrameworkVersion) == 'v4.5.2' Or $(TargetFrameworkVersion) == 'v4.5.3' Or $(TargetFrameworkVersion) == 'v4.6' Or $(TargetFrameworkVersion) == 'v4.6.1' Or $(TargetFrameworkVersion) == 'v4.6.2' Or $(TargetFrameworkVersion) == 'v4.6.3')">
       <ItemGroup>

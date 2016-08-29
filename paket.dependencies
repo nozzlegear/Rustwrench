@@ -1,9 +1,11 @@
 source https://www.nuget.org/api/v2
 
+nuget Bcrypt.NET
 nuget DotEnvFile
 nuget jwt
 nuget MyCouch
 nuget Nancy
 nuget Nancy.Hosting.Self
 nuget Mono.Posix
+nuget netfx-System.DateTimeEpochExtensions
 nuget ShopifySharp

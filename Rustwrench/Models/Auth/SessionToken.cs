@@ -1,3 +1,4 @@
+using System;
 using System.Reflection;
 
 namespace Rustwrench.Models
@@ -24,5 +25,15 @@ namespace Rustwrench.Models
         /// Part of the JWT spec, this value is the date and time that the session is valid for in UNIX epoch seconds.
         /// </summary>
         public long exp { get; set; }
+
+        /// <summary>
+        /// Serializes this token into a JWT token string.
+        /// </summary>
+        public string SerializeTokenString(int expirationDays = 30)
+        {
+            exp = DateTime.UtcNow.AddDays(expirationDays).ToEpochTime();
+
+            return JWT.JsonWebToken.Encode(this, Config.JwtSecretKey, JWT.JwtHashAlgorithm.HS512);
+        }
     }
 }

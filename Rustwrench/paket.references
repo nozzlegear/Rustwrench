@@ -5,3 +5,5 @@ ShopifySharp
 MyCouch
 DotEnvFile
 jwt
+BCrypt.NET
+netfx-System.DateTimeEpochExtensions

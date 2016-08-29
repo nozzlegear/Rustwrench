@@ -24,6 +24,10 @@ namespace Rustwrench
 
         public static string JwtSecretKey { get; } = Get("JwtSecretKey");
 
+        public static string ShopifyApiKey { get; } = Get("ShopifyApiKey");
+
+        public static string ShopifySecretKey { get; } = Get("ShopifySecretKey");
+
         /// <summary>
         /// Attempts to get a configuration value from the AppSettings.private.env file. If the value is not found, it will then attempt to get it from the App.config file, and then from the environment variables.
         /// If a prefixed value is found, it will take precedence.
