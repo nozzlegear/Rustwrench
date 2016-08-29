@@ -7,3 +7,4 @@ DotEnvFile
 jwt
 BCrypt.NET
 netfx-System.DateTimeEpochExtensions
+Nancy.Validation.FluentValidation

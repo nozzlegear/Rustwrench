@@ -69,7 +69,7 @@ namespace Rustwrench.Routes
                     throw new Exception($"Failed to save user's integration. {update.StatusCode} {update.Reason}");
                 }
 
-                return UpdateSessionToken(user);
+                return Response.WithSessionToken(user);
             };
 
             // Routes for activating a user's charge, via API or redirects.
@@ -102,7 +102,7 @@ namespace Rustwrench.Routes
                     throw new Exception($"Failed to save user's new charge. {update.StatusCode} {update.Reason}");
                 }
 
-                return UpdateSessionToken(user);
+                return Response.WithSessionToken(user);
             };
         }
     }

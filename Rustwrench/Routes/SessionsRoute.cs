@@ -38,10 +38,7 @@ namespace Rustwrench.Routes
                 }
 
                 // Create a JWT that expires in 30 days
-                var payload = new SessionToken(user.Content);
-                var token = payload.SerializeTokenString();
-
-                return Response.AsJson(new { token, payload }).WithCookie("Rustwrench_Auth", token);
+                return Response.WithSessionToken(user.Content);
             };
 
             Post["/verify"] = (parameters) =>

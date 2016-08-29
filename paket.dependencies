@@ -7,5 +7,6 @@ nuget MyCouch
 nuget Nancy
 nuget Nancy.Hosting.Self
 nuget Mono.Posix
+nuget Nancy.Validation.FluentValidation
 nuget netfx-System.DateTimeEpochExtensions
 nuget ShopifySharp
