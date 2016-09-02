@@ -1,5 +1,6 @@
 Nancy
 Nancy.Hosting.Self
+Nancy.Hosting.AspNet
 ShopifySharp
 MyCouch
 DotEnvFile

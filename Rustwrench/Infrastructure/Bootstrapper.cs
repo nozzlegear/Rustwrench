@@ -1,21 +1,33 @@
-using Nancy;
-using Nancy.Bootstrapper;
-using System.Reflection;
-using System.Threading;
-using System.Threading.Tasks;
-
-namespace Rustwrench.Infrastructure
+﻿namespace Rustwrench
 {
-    /// <summary>
-    /// A utility class for handling Nancy's startup procedure, typically used to wire up the OnError, OnBeforeRequest and OnAfterRequest methods.
-    /// </summary>
-    /// <remarks>
-    /// Nancy will automatically find all classes that implement IApplicationStartup and call them when Nancy starts.
-    /// </remarks>
-    public class Startup : IApplicationStartup
+    using Infrastructure;
+    using Nancy;
+    using System;
+    using System.Threading;
+    using System.Threading.Tasks;
+    using Nancy.Bootstrapper;
+    using Nancy.TinyIoc;
+
+    public class Bootstrapper : DefaultNancyBootstrapper
     {
-        public void Initialize(IPipelines pipelines)
+        // The bootstrapper enables you to reconfigure the composition of the framework,
+        // by overriding the various methods and properties.
+        // For more information https://github.com/NancyFx/Nancy/wiki/Bootstrapper
+        public Bootstrapper()
         {
+            var task = Task.Run(async () =>
+            {
+                await Database.ConfigureAsync();
+            });
+
+            task.ConfigureAwait(false);
+            task.Wait();
+        }
+
+        protected override void ApplicationStartup(TinyIoCContainer container, IPipelines pipelines)
+        {
+            base.ApplicationStartup(container, pipelines);
+
             pipelines.BeforeRequest += (NancyContext context) =>
             {
                 // A return value of null means that no action is taken by the hook and that the request should be 
@@ -36,12 +48,12 @@ namespace Rustwrench.Infrastructure
             };
         }
 
-        /// <summary>
-        /// Configures app resources, such as creating a CouchDB databases.
-        /// </summary>
-        public static async Task ConfigureAsync(string[] args, CancellationToken ct)
+        protected override IRootPathProvider RootPathProvider
         {
-            await Database.ConfigureAsync();
+            get
+            {
+                return new Nancy.Hosting.Aspnet.AspNetRootPathProvider();
+            }
         }
     }
 }
