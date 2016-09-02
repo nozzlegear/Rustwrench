@@ -43,11 +43,17 @@ namespace Rustwrench.Routes
 
             Post["/verify"] = (parameters) =>
             {
-                var tokenString = this.Bind<VerifySessionRequest>();
+                var req = this.Bind<VerifySessionRequest>();
+                var validation = this.Validate(req);
+
+                if (!validation.IsValid)
+                {
+                    return Response.AsJsonError("Request did not pass validation.", HttpStatusCode.NotAcceptable, validation.FormattedErrors);
+                }
 
                 try
                 {
-                    SessionToken token = JWT.JsonWebToken.DecodeToObject<SessionToken>(tokenString.Token, Config.JwtSecretKey, true);
+                    SessionToken token = JWT.JsonWebToken.DecodeToObject<SessionToken>(req.Token, Config.JwtSecretKey, true);
 
                     return Response.AsJson(token);
                 }
