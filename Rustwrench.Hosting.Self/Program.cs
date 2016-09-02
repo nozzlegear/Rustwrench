@@ -26,23 +26,7 @@ namespace Rustwrench.Hosting.Self
 
                 Stop();
             };
-
-            //// Configure the program
-            //try
-            //{
-            //    var task = Task.Run(async () =>
-            //    {
-            //        await Startup.ConfigureAsync(args, cancellation.Token);
-            //    });
-
-            //    task.ConfigureAwait(false);
-            //    task.Wait();
-            //}
-            //catch (TaskCanceledException)
-            //{
-            //    // Thrown when the task is canceled (ctrl+c is pressed).
-            //}
-
+            
             Host = new NancyHost(new HostConfiguration()
             {
                 UrlReservations = new UrlReservations()
