@@ -5,6 +5,7 @@ nuget DotEnvFile
 nuget jwt
 nuget MyCouch
 nuget Nancy
+nuget Nancy.Hosting.AspNet
 nuget Nancy.Hosting.Self
 nuget Mono.Posix
 nuget Nancy.Validation.FluentValidation

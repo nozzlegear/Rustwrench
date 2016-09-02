@@ -1,6 +1,8 @@
 using Nancy;
 using Nancy.Bootstrapper;
 using System.Reflection;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Rustwrench.Infrastructure
 {
@@ -32,6 +34,14 @@ namespace Rustwrench.Infrastructure
                 context.Response.WithHeader("X-Powered-By", $"Rustwrench {Config.AppVersion}");
                 context.Response.WithHeader("X-Rustwrench-Version", Config.AppVersion);
             };
+        }
+
+        /// <summary>
+        /// Configures app resources, such as creating a CouchDB databases.
+        /// </summary>
+        public static async Task ConfigureAsync(string[] args, CancellationToken ct)
+        {
+            await Database.ConfigureAsync();
         }
     }
 }

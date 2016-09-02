@@ -27,6 +27,8 @@ NUGET
     MyCouch (4.0)
       Newtonsoft.Json (>= 7.0.1) - framework: net45, >= net46, dnxcore50, portable-win+wpa81+monoandroid10+monotouch10
     Nancy (1.4.3)
+    Nancy.Hosting.Aspnet (1.4.1)
+      Nancy (>= 1.4.1)
     Nancy.Hosting.Self (1.4.1)
       Nancy (>= 1.4.1)
     Nancy.Validation.FluentValidation (1.4.1)

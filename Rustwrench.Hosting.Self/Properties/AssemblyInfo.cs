@@ -1,16 +1,15 @@
-﻿using Nancy;
-using System.Reflection;
+﻿using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("Rustwrench")]
+[assembly: AssemblyTitle("Rustwrench.Hosting.Self")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("Rustwrench")]
+[assembly: AssemblyProduct("Rustwrench.Hosting.Self")]
 [assembly: AssemblyCopyright("Copyright ©  2016")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -21,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("459b0a42-58c9-4c33-a2e6-0db89cd039f6")]
+[assembly: Guid("a2c5c2df-bc6d-4b0f-8460-2a9a96a3ca38")]
 
 // Version information for an assembly consists of the following four values:
 //
@@ -35,6 +34,3 @@ using System.Runtime.InteropServices;
 // [assembly: AssemblyVersion("1.0.*")]
 [assembly: AssemblyVersion("1.0.0.0")]
 [assembly: AssemblyFileVersion("1.0.0.0")]
-
-// Instruct Nancy to scan this assembly for fluent validators
-[assembly: IncludeInNancyAssemblyScanning]

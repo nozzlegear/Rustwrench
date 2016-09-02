@@ -5,6 +5,16 @@ VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rustwrench", "Rustwrench\Rustwrench.csproj", "{459B0A42-58C9-4C33-A2E6-0DB89CD039F6}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rustwrench.Hosting.Self", "Rustwrench.Hosting.Self\Rustwrench.Hosting.Self.csproj", "{A2C5C2DF-BC6D-4B0F-8460-2A9A96A3CA38}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rustwrench.Hosting.AspNet", "Rustwrench.Hosting.AspNet\Rustwrench.Hosting.AspNet.csproj", "{ED638DD5-E755-4B7A-940D-5C94AB425686}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution", "Solution", "{7995FAE4-881D-49D0-A08C-CBF91A5DAE5C}"
+	ProjectSection(SolutionItems) = preProject
+		debug.cmd = debug.cmd
+		debug.sh = debug.sh
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,8 +25,19 @@ Global
 		{459B0A42-58C9-4C33-A2E6-0DB89CD039F6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{459B0A42-58C9-4C33-A2E6-0DB89CD039F6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{459B0A42-58C9-4C33-A2E6-0DB89CD039F6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A2C5C2DF-BC6D-4B0F-8460-2A9A96A3CA38}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A2C5C2DF-BC6D-4B0F-8460-2A9A96A3CA38}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A2C5C2DF-BC6D-4B0F-8460-2A9A96A3CA38}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A2C5C2DF-BC6D-4B0F-8460-2A9A96A3CA38}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ED638DD5-E755-4B7A-940D-5C94AB425686}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ED638DD5-E755-4B7A-940D-5C94AB425686}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ED638DD5-E755-4B7A-940D-5C94AB425686}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ED638DD5-E755-4B7A-940D-5C94AB425686}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		EnterpriseLibraryConfigurationToolBinariesPathV6 = packages\EnterpriseLibrary.TransientFaultHandling.6.0.1304.0\lib\portable-net45+win+wp8;packages\EnterpriseLibrary.TransientFaultHandling.Data.6.0.1304.1\lib\NET45
 	EndGlobalSection
 EndGlobal

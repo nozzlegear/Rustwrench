@@ -8,7 +8,7 @@ namespace Rustwrench
         /// <summary>
         /// Configures the database, ensuring they've been created on the server and then initializing their connections.
         /// </summary>
-        public static async Task Configure()
+        public static async Task ConfigureAsync()
         {
             Users = new UserDatabase(Config.DatabaseUrl, "rustwrench_users");
 
@@ -17,6 +17,7 @@ namespace Rustwrench
 
             await Task.WhenAll(createTasks);
 
+            // Configure the databases
             var configTasks = new [] { Users.ConfigureAsync() };
 
             await Task.WhenAll(configTasks);
