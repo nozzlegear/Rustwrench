@@ -1,0 +1,4 @@
+{
+    "plugins": ["lodash", "transform-regenerator"],
+    "presets": ["es2015", "stage-3"]
+}
