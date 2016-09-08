@@ -5,7 +5,9 @@
   "main": "dist/index.js",
   "scripts": {
     "build": "webpack && gulp",
-    "watch": "concurrently --raw \"webpack-dev-server --inline --hot --port 4006\" \"gulp watch\"",
+    "watch": "concurrently --raw \"npm run client\" \"npm run nancy\"",
+    "client": "webpack-dev-server --inline --hot --port 7002",
+    "nancy": "call \"../Rustwrench.Hosting.Self/bin/Debug/Rustwrench.Hosting.Self.exe\"",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {

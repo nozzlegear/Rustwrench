@@ -3,8 +3,6 @@ using Mono.Unix;
 using Mono.Unix.Native;
 using Nancy.Hosting.Self;
 using System.Threading;
-using Rustwrench.Infrastructure;
-using System.Threading.Tasks;
 
 namespace Rustwrench.Hosting.Self
 {
@@ -14,7 +12,7 @@ namespace Rustwrench.Hosting.Self
 
         static void Main(string[] args)
         {
-            const string url = "http://localhost:4005";
+            const string url = "http://localhost:7000";
             var cancellation = new CancellationTokenSource();
 
             Console.CancelKeyPress += (s, e) =>
