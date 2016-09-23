@@ -1,18 +1,27 @@
 "use strict";
 
+// Hack for Ubuntu on Windows: interface enumeration fails with EINVAL, so return empty.
+try {
+  require('os').networkInterfaces()
+} 
+catch (e) {
+  require('os').networkInterfaces = () => ({})
+}
+
 const webpack      = require("webpack");
 const precss       = require('precss');
 const autoprefixer = require('autoprefixer');
 const pkg          = require("./package.json");
 const lodashPack   = require("lodash-webpack-plugin");
+const process      = require("process");
 
 const config = {
     entry: {
-        "app": "pages/app"
+        "app": "app"
     },
     output: {
-        path: "wwwroot/pages",
-        publicPath: "wwwroot/pages", //Must be set for webpack-dev-server
+        path: "dist",
+        publicPath: "dist", //Must be set for webpack-dev-server
         filename: "[name].js",
     },
     resolve: {
@@ -77,7 +86,7 @@ const config = {
     devServer: {
         proxy: {
             "/api/*": {
-                target: "http://localhost:7000",
+                target: process.argv.some(arg => arg === "--aspNet") ? "http://localhost:7001" : "http://localhost:7000",
                 secure: false
             },
             "*": {
@@ -95,6 +104,9 @@ const config = {
                 }
             }
         }
+    },
+    watchOptions: {
+        poll: true,
     }
 }
 

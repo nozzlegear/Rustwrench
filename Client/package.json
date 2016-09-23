@@ -7,6 +7,7 @@
     "build": "webpack && gulp",
     "watch": "concurrently --raw \"npm run client\" \"npm run nancy\"",
     "client": "webpack-dev-server --inline --hot --port 7002",
+    "client:asp": "webpack-dev-server --inline --hot --port 7002 --aspNet",
     "nancy": "call \"../Rustwrench.Hosting.Self/bin/Debug/Rustwrench.Hosting.Self.exe\"",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -58,8 +59,10 @@
     "webpack-dev-server": "^1.14.1"
   },
   "dependencies": {
+    "@types/bluebird": "^3.0.33",
     "@types/classnames": "0.0.28",
     "@types/history": "github:nozzlegear/history.d.ts#069bbf0",
+    "@types/material-ui": "^0.15.36",
     "@types/node": "4.0.22-alpha",
     "@types/node-uuid": "6.0.21-alpha",
     "@types/react": "0.14.27",
@@ -71,17 +74,20 @@
     "@types/shipping-ups": "github:nozzlegear/shipping-ups.d.ts#b9297a5",
     "animate-transition": "github:nozzlegear/animatetransition#19b0452",
     "auto-prop-component": "^1.7.0",
-    "bluebird": "^3.4.0",
-    "bootstrap": "^3.3.6",
+    "bluebird": "^3.4.6",
+    "bootstrap": "^3.3.7",
     "bootstrap-datepicker": "^1.6.1",
     "classnames": "^2.2.5",
     "lodash": "^4.13.1",
+    "material-ui": "^0.15.4",
     "node-uuid": "^1.4.7",
+    "purecss": "^0.6.0",
     "react": "^15.1.0",
     "react-dom": "^15.1.0",
     "react-redux": "^4.4.5",
     "react-router": "^2.6.0",
     "react-router-redux": "^4.0.5",
+    "react-tap-event-plugin": "^1.0.0",
     "redux": "^3.5.2",
     "reqwest": "^2.0.5"
   }
