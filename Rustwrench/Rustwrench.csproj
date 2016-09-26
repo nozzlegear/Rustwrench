@@ -37,6 +37,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Infrastructure\Bootstrapper.cs" />
+    <Compile Include="Models\Requests\Shopify\VerifyUrlRequest.cs" />
     <Compile Include="netfx\System\DateTimeEpochExtensions.cs">
       <Paket>True</Paket>
     </Compile>

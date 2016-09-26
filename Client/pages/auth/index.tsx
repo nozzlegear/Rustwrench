@@ -3,7 +3,8 @@ import * as Reqwest from "reqwest";
 import * as Bluebird from "bluebird";
 import Box from "../../components/box";
 import {SessionToken} from "rustwrench";
-import Paths from "./../../modules/paths"
+import Paths from "./../../modules/paths";
+import {Sessions} from "../../modules/api";
 import {AppName} from "../../modules/strings";
 import {IActions} from "./../../reducers/auth";
 import getApiError from "./../../modules/errors";
@@ -39,6 +40,8 @@ export default class AuthPage extends AutoPropComponent<IProps, IState> {
 
     private pageContainer: Element;
     
+    private api = new Sessions();
+
     //#region Utility functions
     
     private configureState(props: IProps, useSetState: boolean) {
@@ -82,33 +85,18 @@ export default class AuthPage extends AutoPropComponent<IProps, IState> {
         }
 
         this.mergeState({loading: true, error: undefined});
-        
-        const req = Reqwest<SessionToken>({
-            url: "/api/v1/sessions",
-            data: JSON.stringify({username, password}),
-            contentType: "application/json",
-            headers: {"Content-Type": "application/json"},
-            method: "POST",
-        });
 
         try {
-            const result = await Bluebird.resolve(req);
+            const result = await this.api.create({username, password});
 
-            console.log("Got result", result);
-
-            this.props.login(result);
-
-            this.mergeState({loading: false}, () => {
-                navigate(Paths.home.index);
-            })
-        }
-        catch (e) {
-            const result = getApiError(e, "Something went wrong while trying to sign you in. Please try again.");
-
-            this.mergeState({error: result.message, loading: false});
+            this.props.login(result.data);
+        } catch (e) {
+            this.setState({loading: false,error: "Something went wrong and we could not sign you in. Please try again."});
 
             return;
         }
+
+        this.mergeState({loading: false}, () => navigate(Paths.home.index));
     }
 
     //#endregion
@@ -139,10 +127,20 @@ export default class AuthPage extends AutoPropComponent<IProps, IState> {
                     <div className="pure-u-12-24">
                         <Box title="Sign in to your account." error={error} footer={footer}>
                             <div className="form-group">
-                                <TextField fullWidth={true} floatingLabelText="Email" value={username} onChange={this.updateStateFromEvent((s, v) => s.username = v)} />
+                                <TextField 
+                                    fullWidth={true} 
+                                    floatingLabelText="Email" 
+                                    type="email" 
+                                    value={username} 
+                                    onChange={this.updateStateFromEvent((s, v) => s.username = v)} />
                             </div>
                             <div className="form-group">
-                                <TextField fullWidth={true} floatingLabelText="Password" type="password" onChange={this.updateStateFromEvent((s, v) => s.password = v)} />
+                                <TextField 
+                                    fullWidth={true} 
+                                    floatingLabelText="Password" 
+                                    type="password" 
+                                    value={password} 
+                                    onChange={this.updateStateFromEvent((s, v) => s.password = v)} />
                             </div>
                         </Box>
                         <div className="info-line">

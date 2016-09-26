@@ -72,6 +72,7 @@
     "@types/react-router-redux": "github:nozzlegear/react-router-redux.d.ts#13af57a",
     "@types/reqwest": "github:nozzlegear/reqwest.d.ts#4287b39",
     "@types/shipping-ups": "github:nozzlegear/shipping-ups.d.ts#b9297a5",
+    "@types/whatwg-fetch": "0.0.31",
     "animate-transition": "github:nozzlegear/animatetransition#19b0452",
     "auto-prop-component": "^1.7.0",
     "bluebird": "^3.4.6",
@@ -89,6 +90,7 @@
     "react-router-redux": "^4.0.5",
     "react-tap-event-plugin": "^1.0.0",
     "redux": "^3.5.2",
-    "reqwest": "^2.0.5"
+    "reqwest": "^2.0.5",
+    "whatwg-fetch": "^1.0.0"
   }
 }

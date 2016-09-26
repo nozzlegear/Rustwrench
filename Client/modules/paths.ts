@@ -9,6 +9,7 @@ export const Paths = {
     },
     signup: {
         index: "/signup",
+        integrate: "/signup/integrate",
     }
 }
 
@@ -42,6 +43,11 @@ export function getPathRegex(path: string) {
 
         case Paths.signup.index:
             output = /\/signup\/?$/i;
+        break;
+
+        case Paths.signup.integrate:
+            output = /\/signup\/integrate\/?$/i;
+        break; 
     }
 
     return output;

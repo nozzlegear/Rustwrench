@@ -5,6 +5,9 @@ const polyfill = require("babel-polyfill");
 const injectTapEventPlugin = require("react-tap-event-plugin");
 injectTapEventPlugin(); 
 
+// Fetch shim
+require("./node_modules/whatwg-fetch/fetch.js");
+
 // General imports
 import * as React from "react";
 import {bindActionCreators} from "redux";
@@ -29,6 +32,7 @@ import AuthPage from "./pages/auth";
 
 // Signup components
 import SignupPage from "./pages/signup";
+import IntegratePage from "./pages/signup/integrate";
 
 // Styles
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
@@ -67,10 +71,10 @@ export function MainWithoutNav(props: IReduxState & React.Props<any>) {
 {
     function checkAuthState(args: Router.RouterState, replace: Router.RedirectFunction, callback: Function) {
         const state = store.getState() as IReduxState;
-        const tokenInvalid = !state.auth || !state.auth.token || (state.auth.exp * 1000 < Date.now()); 
+        const tokenInvalid = !state.auth || !state.auth.rustwrench_token_payload || (state.auth.rustwrench_token_payload.exp * 1000 < Date.now()); 
 
         if (tokenInvalid) {
-            console.log("User's auth token is invalid.");
+            console.log("User's auth token is invalid.", state.auth);
 
             replace(Paths.auth.login);
         }
@@ -102,6 +106,9 @@ export function MainWithoutNav(props: IReduxState & React.Props<any>) {
                 <Route component={AppWithoutNav}>
                     <Route path={Paths.auth.login} component={AuthPage} onEnter={(args) => {document.title = "Login"}} />
                     <Route path={Paths.signup.index} component={SignupPage} onEnter={args => document.title = "Signup"} />
+                    <Route onEnter={checkAuthState}>
+                        <Route path={Paths.signup.integrate} component={IntegratePage} onEnter={args => document.title = "Connect your Shopify store"} />
+                    </Route>
                 </Route>
                 <Route path={Paths.auth.logout} onEnter={logout} />
                 <Route path={"/error/:statusCode"} component={Error} onEnter={(args) => {document.title = `Error ${args.params["statusCode"]} | KMSignalR`}} />

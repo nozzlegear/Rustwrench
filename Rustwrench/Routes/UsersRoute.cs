@@ -21,11 +21,17 @@ namespace Rustwrench.Routes
                 {
                     return Response.AsJsonError("Request did not pass validation.", HttpStatusCode.NotAcceptable, validation.FormattedErrors);
                 }
+
+                // Check if the user already exists
+                if ((await Database.Users.Documents.HeadAsync(req.Username.ToLower())).IsSuccess)
+                {
+                    return Response.AsJsonError("A user with that email address already exists.", HttpStatusCode.NotAcceptable);
+                }
                 
                 var password = Crypto.HashPassword(req.Password);
                 var user = new User()
                 {
-                    UserId = req.Username,
+                    UserId = req.Username.ToLower(),
                     HashedPassword = password,
                 };
 

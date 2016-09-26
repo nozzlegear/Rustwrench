@@ -6,12 +6,15 @@ export type AuthActionType = (
     "LOGOUT"
 );
 
-export interface State extends SessionToken { }
+export interface AuthState {
+    rustwrench_token: string;
+    rustwrench_token_payload: SessionToken;
+}
 
-export interface AuthAction extends Action<AuthActionType, State> {  }
+export interface AuthAction extends Action<AuthActionType, AuthState> {  }
 
 export interface IActions {
-    login: (payload: SessionToken) => AuthAction;
+    login: (payload: AuthState) => AuthAction;
     logout: () => AuthAction;
 }
 
@@ -26,7 +29,7 @@ export const Actions: IActions = {
     })
 }
 
-export default function authReducer(state: State, action: AuthAction) {
+export default function authReducer(state: AuthState, action: AuthAction) {
     if (!state) {
         state = JSON.parse(localStorage.getItem(AuthStorageName) || "{}");
     }

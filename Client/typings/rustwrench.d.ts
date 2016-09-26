@@ -14,7 +14,6 @@ declare module "rustwrench" {
     }
 
     export interface SessionToken extends User {
-        token: string;
         /**
          * The date and time that the user's auth expires, in Unix-epoch seconds.
          */
