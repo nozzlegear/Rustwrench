@@ -87,7 +87,7 @@ require("./css/theme.scss");
                     </Route>
                 </Route>
                 <Route path={Paths.auth.logout} onEnter={logout} />
-                <Route path={"/error/:statusCode"} component={Error} onEnter={(args) => {document.title = `Error ${args.params["statusCode"]} | KMSignalR`}} />
+                <Route path={"/error/:statusCode"} component={Error} onEnter={(args) => {document.title = `Error ${args.params["statusCode"]} | ${AppName}`}} />
                 <Redirect path={"*"} to={"/error/404"} />
             </Router>
         </Provider>

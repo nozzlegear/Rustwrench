@@ -21,7 +21,7 @@ namespace Rustwrench
         {
             var token = new SessionToken(user, expirationDays);
 
-            return response.AsJson(token).WithCookie("KMSignalR_Auth", token.token);
+            return response.AsJson(token).WithCookie("Rustwrench_Auth", token.token);
         }
 
         public static Response InvalidToken(this IResponseFormatter response)
