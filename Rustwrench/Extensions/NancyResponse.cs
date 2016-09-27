@@ -15,26 +15,13 @@ namespace Rustwrench
         }
 
         /// <summary>
-        /// Update's a user's JWT session token, passing it along with the response data as 'updatedSessionToken'. 
+        /// Takes a user object and encodes it as a new JWT session token.
         /// </summary>
-        public static Response WithSessionToken(this IResponseFormatter response, User userData)
+        public static Response WithSessionToken(this IResponseFormatter response, User user, int expirationDays = 30)
         {
-            return response.WithSessionToken(userData, new {});
-        }
+            var token = new SessionToken(user, expirationDays);
 
-        /// <summary>
-        /// Takes response data and updates the user's JWT session token, passing it along with the response data as 'updatedSessionToken'. 
-        /// </summary>
-        public static Response WithSessionToken<T>(this IResponseFormatter response, User userData, T outputData)
-        {
-            var data = outputData.ToDictionary();
-            var payload = new SessionToken(userData);
-            var token = payload.SerializeTokenString();
-
-            data["rustwrench_token"] = token;
-            data["rustwrench_token_payload"] = payload;
-
-            return response.AsJson(data).WithCookie("Rustwrench_Auth", token);
+            return response.AsJson(token).WithCookie("KMSignalR_Auth", token.token);
         }
 
         public static Response InvalidToken(this IResponseFormatter response)

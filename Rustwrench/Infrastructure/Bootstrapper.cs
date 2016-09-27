@@ -7,6 +7,7 @@
     using System.Threading.Tasks;
     using Nancy.Bootstrapper;
     using Nancy.TinyIoc;
+    using Models;
 
     public class Bootstrapper : DefaultNancyBootstrapper
     {
@@ -22,6 +23,12 @@
 
             task.ConfigureAwait(false);
             task.Wait();
+
+            // Initialize AutoMapper
+            AutoMapper.Mapper.Initialize(cfg =>
+            {
+                cfg.CreateMap<User, SessionToken>();
+            });
         }
 
         protected override void ApplicationStartup(TinyIoCContainer container, IPipelines pipelines)

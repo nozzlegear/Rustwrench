@@ -2,29 +2,26 @@ import {SessionToken, Action} from "rustwrench";
 import {AuthStorageName} from "../modules/strings";
 
 export type AuthActionType = (
-    "LOGIN" |
-    "LOGOUT"
+    "SET_AUTH" |
+    "REMOVE_AUTH"
 );
 
-export interface AuthState {
-    rustwrench_token: string;
-    rustwrench_token_payload: SessionToken;
-}
+export interface AuthState extends SessionToken { }
 
 export interface AuthAction extends Action<AuthActionType, AuthState> {  }
 
 export interface IActions {
-    login: (payload: AuthState) => AuthAction;
-    logout: () => AuthAction;
+    setAuth: (payload: AuthState) => AuthAction;
+    removeAuth: () => AuthAction;
 }
 
 export const Actions: IActions = {
-    login: (payload) => ({
-        type: "LOGIN",
+    setAuth: (payload) => ({
+        type: "SET_AUTH",
         reduce: state => payload  
     }),
-    logout: () => ({
-        type: "LOGOUT",
+    removeAuth: () => ({
+        type: "REMOVE_AUTH",
         reduce: state => ({} as any)
     })
 }
@@ -35,8 +32,8 @@ export default function authReducer(state: AuthState, action: AuthAction) {
     }
 
     switch (action.type) {
-        case "LOGIN": 
-        case "LOGOUT":
+        case "SET_AUTH": 
+        case "REMOVE_AUTH":
             state = action.reduce(state);
         break;
 

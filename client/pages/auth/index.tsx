@@ -5,15 +5,16 @@ import Box from "../../components/box";
 import {SessionToken} from "rustwrench";
 import Paths from "./../../modules/paths";
 import {Sessions} from "../../modules/api";
+import {Actions} from "./../../reducers/auth";
 import {AppName} from "../../modules/strings";
-import {IActions} from "./../../reducers/auth";
+import {store} from "../../modules/redux_store";
 import getApiError from "./../../modules/errors";
 import {navigate} from "./../../modules/redux_store";
 import {AutoPropComponent} from "auto-prop-component";
 import {TextField, RaisedButton, FontIcon} from "material-ui";
 import {RouterState, RedirectFunction, Link} from "react-router";
 
-export interface IProps extends IActions
+export interface IProps extends React.Props<any>
 {
     
 }
@@ -89,10 +90,11 @@ export default class AuthPage extends AutoPropComponent<IProps, IState> {
         try {
             const result = await this.api.create({username, password});
 
-            this.props.login(result.data);
+            store.dispatch(Actions.setAuth(result.data));
         } catch (e) {
             this.setState({loading: false,error: "Something went wrong and we could not sign you in. Please try again."});
-
+            console.log(e);
+            
             return;
         }
 

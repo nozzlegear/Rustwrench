@@ -31,7 +31,7 @@ namespace Rustwrench.Routes
                 user.ShopId = null;
 
                 var update = await Database.Users.Entities.PutAsync(user);
-
+                
                 if (!update.IsSuccess)
                 {
                     throw new Exception($"Failed to save user's app removal changes. Their shop id was {shop.Id.Value} Database responded with {update.StatusCode} {update.Reason}");

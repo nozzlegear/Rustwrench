@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
 
-namespace Rustwrench.Models.Requests.Sessions
+namespace Rustwrench.Models.Requests.Shopify
 {
     public class VerifyUrlRequest
     {

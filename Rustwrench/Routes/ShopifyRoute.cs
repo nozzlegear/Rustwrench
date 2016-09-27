@@ -7,7 +7,8 @@ using ShopifySharp;
 using ShopifySharp.Enums;
 using Nancy;
 using Nancy.ModelBinding;
-using Rustwrench.Models.Requests.Sessions;
+using Rustwrench.Models.Requests.Shopify;
+using Nancy.Validation;
 
 namespace Rustwrench.Routes
 {
@@ -15,27 +16,39 @@ namespace Rustwrench.Routes
     {
         public ShopifyRoute() : base("/api/v1/shopify")
         {
-            // Routes for finishing a user's Shopify integration, via API or redirects.
-            Post["/integrate", true] = 
-            Get["/integrate", true] = async (parameters, ct) =>
+            Post["/authorize", true] = async (parameters, ct) =>
             {
-                string shopifyAuthCode = parameters.code;
-                string myShopifyUrl = parameters.shop;
+                var model = this.BindAndValidate<AuthorizeRequest>();
+                
+                if (!ModelValidationResult.IsValid)
+                {
+                    return Response.AsJsonError("Request did not pass validation.", HttpStatusCode.NotAcceptable, ModelValidationResult.FormattedErrors);
+                }
 
-                var getUser = await Database.Users.Entities.GetAsync<User>(this.SessionToken.UserId);
+                var getUser = await Database.Users.Entities.GetAsync<User>(SessionToken.UserId);
 
                 if (!getUser.IsSuccess)
                 {
-                    throw new Exception("User not found.");
+                    return Response.AsJsonError("Could not find user in database.", HttpStatusCode.NotFound);
                 }
 
                 // Complete the OAuth process and integrate the user
                 var user = getUser.Content;
-                var accessToken = await ShopifyAuthorizationService.Authorize(shopifyAuthCode, myShopifyUrl, Config.ShopifyApiKey, Config.ShopifySecretKey);
-                var shop = await new ShopifyShopService(myShopifyUrl, accessToken).GetAsync();
+                string accessToken;
+
+                try
+                {
+                    accessToken = await ShopifyAuthorizationService.Authorize(model.Code, model.ShopUrl, Config.ShopifyApiKey, Config.ShopifySecretKey);
+                }
+                catch (ShopifyException e) when (e.JsonError.ContainsIgnoreCase("authorization code was not found or was already used"))
+                {
+                    return Response.AsJsonError("Integration failed: the authorization code was not found or was already used.", HttpStatusCode.BadRequest);
+                }
+
+                var shop = await new ShopifyShopService(model.ShopUrl, accessToken).GetAsync();
 
                 user.ShopifyAccessToken = accessToken;
-                user.ShopifyUrl = myShopifyUrl;
+                user.ShopifyUrl = model.ShopUrl;
                 user.ShopId = shop.Id;
                 user.ShopName = shop.Name;
 
@@ -69,15 +82,13 @@ namespace Rustwrench.Routes
 
                 if (!update.IsSuccess)
                 {
-                    throw new Exception($"Failed to save user's integration. {update.StatusCode} {update.Reason}");
+                    throw new Exception($"Failed to save user's integration. {(int)update.StatusCode} {update.Reason}");
                 }
 
                 return Response.WithSessionToken(user);
             };
 
-            // Routes for activating a user's charge, via API or redirects.
-            Post["/activate_charge", true] = 
-            Get["/activate_charge", true] = async (parameters, ct) =>
+            Post["/activate_charge", true] = async (parameters, ct) =>
             {
                 long chargeId = parameters.charge_id;
                 var getUser = await Database.Users.Entities.GetAsync<User>(this.SessionToken.UserId);
@@ -108,6 +119,20 @@ namespace Rustwrench.Routes
                 return Response.WithSessionToken(user);
             };
 
+            Post["/create_authorization_url"] = (parameters) =>
+            {
+                var permissions = new ShopifyAuthorizationScope[] 
+                {
+                    ShopifyAuthorizationScope.ReadOrders
+                };
+                var model = this.Bind<CreateAuthorizationUrlRequest>();
+                var url = ShopifyAuthorizationService.BuildAuthorizationUrl(permissions, model.Url, Config.ShopifyApiKey, model.RedirectUrl);
+
+                return Response.AsJson(new 
+                {
+                    url = url
+                });
+            };
         }
     }
 
@@ -117,7 +142,13 @@ namespace Rustwrench.Routes
         {
             Post["/verify_url", true] = async (parameters, ct) =>
             {
-                var model = this.Bind<VerifyUrlRequest>();
+                var model = this.BindAndValidate<VerifyUrlRequest>();
+                
+                if (!ModelValidationResult.IsValid)
+                {
+                    return Response.AsJsonError("Request did not pass validation.", HttpStatusCode.NotAcceptable, ModelValidationResult.FormattedErrors);
+                }
+                
                 var isValid = await ShopifyAuthorizationService.IsValidMyShopifyUrl(model.Url);
                 
                 return Response.AsJson(new
@@ -126,21 +157,6 @@ namespace Rustwrench.Routes
                 });
             };
 
-            Post["/create_authorization_url"] = (parameters) =>
-            {
-                var reqUrl = Request.Url;
-                var permissions = new ShopifyAuthorizationScope[] 
-                {
-                    ShopifyAuthorizationScope.ReadOrders
-                };
-                var model = this.Bind<VerifyUrlRequest>();
-                var url = ShopifyAuthorizationService.BuildAuthorizationUrl(permissions, model.Url, Config.ShopifyApiKey, $"{reqUrl.Scheme}://{reqUrl.HostName}:{reqUrl.Port}/api/v1/shopify/integrate");
-
-                return Response.AsJson(new 
-                {
-                    url = url
-                });
-            };
         }
     }
 }

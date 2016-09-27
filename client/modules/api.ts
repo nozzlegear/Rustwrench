@@ -91,7 +91,9 @@ export class Shopify extends BaseService {
 
     public verifyUrl = (data: {url: string}) => this.sendRequest<{isValid: boolean}>("verify_url", "POST", data);
 
-    public createAuthorizationUrl = (data: {url: string}) => this.sendRequest<{url: string}>("create_authorization_url", "POST", data);
+    public createAuthorizationUrl = (data: {url: string; redirectUrl: string}) => this.sendRequest<{url: string}>("create_authorization_url", "POST", data);
+
+    public authorize = (data: {code: string, shopUrl: string, fullQueryString: string}) => this.sendRequest<AuthState>("authorize", "POST", data);
 }
 
 export class Sessions extends BaseService{

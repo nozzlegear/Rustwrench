@@ -16,23 +16,22 @@ namespace Rustwrench.Routes
             // Creates a new session
             Post["", true] = async (parameters, ct) =>
             {
-                var req = this.Bind<CreateSessionRequest>();
-                var validation = this.Validate(req);
+                var model = this.BindAndValidate<CreateSessionRequest>();
 
-                if (!validation.IsValid)
+                if (!ModelValidationResult.IsValid)
                 {
-                    return Response.AsJsonError("Request did not pass validation.", HttpStatusCode.NotAcceptable, validation.FormattedErrors);
+                    return Response.AsJsonError("Request did not pass validation.", HttpStatusCode.NotAcceptable, ModelValidationResult.FormattedErrors);
                 }
 
                 // Ensure the username is correct
-                var user = await Database.Users.Entities.GetAsync<User>(req.Username.ToLower());
+                var user = await Database.Users.Entities.GetAsync<User>(model.Username.ToLower());
 
                 if ((int) user.StatusCode == 404)
                 {
                     return Response.AsJsonError("Username not found.", HttpStatusCode.Unauthorized);
                 }
 
-                if (! Crypto.Verify(req.Password, user.Content.HashedPassword))
+                if (! Crypto.Verify(model.Password, user.Content.HashedPassword))
                 {
                     return Response.AsJsonError("Password is incorrect.", HttpStatusCode.Unauthorized);
                 }
@@ -43,17 +42,16 @@ namespace Rustwrench.Routes
 
             Post["/verify"] = (parameters) =>
             {
-                var req = this.Bind<VerifySessionRequest>();
-                var validation = this.Validate(req);
+                var model = this.Bind<VerifySessionRequest>();
 
-                if (!validation.IsValid)
+                if (!ModelValidationResult.IsValid)
                 {
-                    return Response.AsJsonError("Request did not pass validation.", HttpStatusCode.NotAcceptable, validation.FormattedErrors);
+                    return Response.AsJsonError("Request did not pass validation.", HttpStatusCode.NotAcceptable, ModelValidationResult.FormattedErrors);
                 }
 
                 try
                 {
-                    SessionToken token = JWT.JsonWebToken.DecodeToObject<SessionToken>(req.Token, Config.JwtSecretKey, true);
+                    SessionToken token = JWT.JsonWebToken.DecodeToObject<SessionToken>(model.Token, Config.JwtSecretKey, true);
 
                     return Response.AsJson(token);
                 }

@@ -24,8 +24,8 @@ import {Actions as AuthActions} from "./reducers/auth";
 
 // Layout components
 import Error from "./pages/error";
-import Navbar from "./components/nav";
-import Footer from "./components/footer";
+import MainWithNav from "./components/main_with_nav";
+import MainWithoutNav from "./components/main_without_nav";
 
 // Auth components
 import AuthPage from "./pages/auth";
@@ -33,57 +33,32 @@ import AuthPage from "./pages/auth";
 // Signup components
 import SignupPage from "./pages/signup";
 import IntegratePage from "./pages/signup/integrate";
+import FinalizeIntegrationPage from "./pages/signup/finalize";
+
+// Home components
+import HomePage from "./pages/home";
 
 // Styles
-import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 require("./node_modules/purecss/build/pure.css");
 require("./css/theme.scss");
 
-export default function MainWithNav(props: IReduxState & React.Props<any>) { 
-    return (
-        <MuiThemeProvider>
-            <main id="app"> 
-                <Navbar {...props} children={undefined} />
-                <div id="body">
-                    {React.cloneElement(props.children as any, props)}
-                </div>
-                <Footer />
-            </main>
-        </MuiThemeProvider>
-    )
-}
-
-export function MainWithoutNav(props: IReduxState & React.Props<any>) {
-    return (
-        <MuiThemeProvider>
-            <main id="app" className="minimal"> 
-                <div id="body">
-                    <div className="page-header">
-                        <Link to={Paths.home.index}>{AppName}</Link>
-                    </div>
-                    {React.cloneElement(props.children as any, props)}
-                </div>
-            </main>
-        </MuiThemeProvider>
-    )
-}
-
 {
     function checkAuthState(args: Router.RouterState, replace: Router.RedirectFunction, callback: Function) {
+        const path = args.location.pathname;
         const state = store.getState() as IReduxState;
-        const tokenInvalid = !state.auth || !state.auth.rustwrench_token_payload || (state.auth.rustwrench_token_payload.exp * 1000 < Date.now()); 
+        const tokenInvalid = !state.auth || !state.auth.token || (state.auth.exp * 1000 < Date.now()); 
 
         if (tokenInvalid) {
-            console.log("User's auth token is invalid.", state.auth);
-
             replace(Paths.auth.login);
+        } else if (!state.auth.shopifyUrl && !getPathRegex(Paths.signup.integrate).test(path) && !getPathRegex(Paths.signup.finalizeIntegration).test(path)) {
+            replace(Paths.signup.integrate);
         }
 
         callback();
     }
 
     function logout(args: Router.RouterState, replace: Router.RedirectFunction, callback: Function) {
-        store.dispatch(AuthActions.logout());
+        store.dispatch(AuthActions.removeAuth());
         replace(Paths.auth.login);
         callback();
     }
@@ -99,8 +74,8 @@ export function MainWithoutNav(props: IReduxState & React.Props<any>) {
         <Provider store={store}>
             <Router history={history}>
                 <Route component={AppWithNav}>
-                    <Route onEnter={checkAuthState} component={AppWithNav} onChange={(prevState, nextState, replace, callback) => {console.log("AuthState router triggered onChange event."); callback()}} >
-                        <Route path={Paths.home.index} />
+                    <Route onEnter={checkAuthState} >
+                        <Route path={Paths.home.index} component={HomePage} onEnter={args => document.title = AppName} />
                     </Route>
                 </Route>
                 <Route component={AppWithoutNav}>
@@ -108,6 +83,7 @@ export function MainWithoutNav(props: IReduxState & React.Props<any>) {
                     <Route path={Paths.signup.index} component={SignupPage} onEnter={args => document.title = "Signup"} />
                     <Route onEnter={checkAuthState}>
                         <Route path={Paths.signup.integrate} component={IntegratePage} onEnter={args => document.title = "Connect your Shopify store"} />
+                        <Route path={Paths.signup.finalizeIntegration} component={FinalizeIntegrationPage} onEnter={args => document.title = "Connecting your Shopify store"} />
                     </Route>
                 </Route>
                 <Route path={Paths.auth.logout} onEnter={logout} />

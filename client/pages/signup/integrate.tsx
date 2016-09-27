@@ -1,6 +1,7 @@
 import * as React from 'react';
 import Box from "../../components/box";
 import {SessionToken} from "rustwrench";
+import {Paths} from "../../modules/paths";
 import {IReduxState} from "../../reducers";
 import {Actions} from "../../reducers/auth";
 import {AppName} from "../../modules/strings";
@@ -28,8 +29,6 @@ export default class IntegratePage extends AutoPropComponent<IProps, IState> {
     
     public state: IState = {};
 
-    private shopifyApi = new Shopify();
-    
     //#region Utility functions
     
     private configureState(props: IProps, useSetState: boolean) {
@@ -52,6 +51,7 @@ export default class IntegratePage extends AutoPropComponent<IProps, IState> {
         e.preventDefault();
 
         const {shopUrl, loading} = this.state;
+        const api = new Shopify(this.props.auth.token);
 
         if (loading) {
             return;
@@ -61,7 +61,7 @@ export default class IntegratePage extends AutoPropComponent<IProps, IState> {
 
         // Verify the shop url first
         try {
-            const result = await this.shopifyApi.verifyUrl({
+            const result = await api.verifyUrl({
                 url: this.state.shopUrl
             });
 
@@ -78,8 +78,9 @@ export default class IntegratePage extends AutoPropComponent<IProps, IState> {
 
         // Create an authorization url
         try {
-            const result = await this.shopifyApi.createAuthorizationUrl({
-                url: this.state.shopUrl
+            const result = await api.createAuthorizationUrl({
+                url: this.state.shopUrl,
+                redirectUrl: `${window.location.protocol}//${window.location.host}${Paths.signup.finalizeIntegration}`,
             });
 
             if (!result.ok ) {
@@ -115,7 +116,7 @@ export default class IntegratePage extends AutoPropComponent<IProps, IState> {
                 fullWidth={true} 
                 primary={true}
                 onTouchTap={e => this.createAccount(e)}
-                label={loading ? "Integrating" : "Integrate"} 
+                label={loading ? "Connecting" : "Connect"} 
                 icon={loading ? <FontIcon className="fa fa-spinner fa-spin" /> : null} />);
 
         return (

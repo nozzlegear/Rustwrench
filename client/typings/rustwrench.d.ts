@@ -13,21 +13,29 @@ declare module "rustwrench" {
         route?: Router.PlainRoute;
     }
 
-    export interface SessionToken extends User {
+    interface IUser {
+        /// <summary>
+        /// The user's username/id. MyCouch will automatically set this as the CouchDB id.
+        /// </summary>
+        userId: string;
+
+        shopifyUrl: string;
+
+        shopName: string;
+
+        shopId?: number;
+
+        shopifyChargeId?: number;
+
+        permissions: string[];
+    }
+
+    export interface SessionToken extends IUser {
+        token: string;
+
         /**
          * The date and time that the user's auth expires, in Unix-epoch seconds.
          */
         exp: number;
-    }
-
-    export interface User {
-        /**
-         * The user's id and username.
-         */
-        userId: string;
-        /**
-         * The user's permissions.
-         */
-        permissions: string[];
     }
 }

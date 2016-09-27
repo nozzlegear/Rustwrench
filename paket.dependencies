@@ -1,5 +1,6 @@
 source https://www.nuget.org/api/v2
 
+nuget automapper
 nuget Bcrypt.NET
 nuget DotEnvFile
 nuget jwt

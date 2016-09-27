@@ -86,7 +86,7 @@ export default class SignupPage extends AutoPropComponent<IProps, IState> {
             return;
         }
 
-        store.dispatch(Actions.login(token));
+        store.dispatch(Actions.setAuth(token));
         navigate(Paths.signup.integrate);
     }
     

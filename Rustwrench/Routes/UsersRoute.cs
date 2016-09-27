@@ -14,24 +14,23 @@ namespace Rustwrench.Routes
         {
             Post["/", true] = async (parameters, ct) =>
             {
-                var req = this.Bind<CreateUserRequest>();
-                var validation = this.Validate(req);
+                var model = this.BindAndValidate<CreateUserRequest>();
 
-                if (! validation.IsValid)
+                if (! ModelValidationResult.IsValid)
                 {
-                    return Response.AsJsonError("Request did not pass validation.", HttpStatusCode.NotAcceptable, validation.FormattedErrors);
+                    return Response.AsJsonError("Request did not pass validation.", HttpStatusCode.NotAcceptable, ModelValidationResult.FormattedErrors);
                 }
 
                 // Check if the user already exists
-                if ((await Database.Users.Documents.HeadAsync(req.Username.ToLower())).IsSuccess)
+                if ((await Database.Users.Documents.HeadAsync(model.Username.ToLower())).IsSuccess)
                 {
                     return Response.AsJsonError("A user with that email address already exists.", HttpStatusCode.NotAcceptable);
                 }
                 
-                var password = Crypto.HashPassword(req.Password);
+                var password = Crypto.HashPassword(model.Password);
                 var user = new User()
                 {
-                    UserId = req.Username.ToLower(),
+                    UserId = model.Username.ToLower(),
                     HashedPassword = password,
                 };
 
