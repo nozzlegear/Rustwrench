@@ -133,6 +133,20 @@ namespace Rustwrench.Routes
                     url = url
                 });
             };
+
+            Get["/orders", true] = async (parameters, ct) =>
+            {
+                int? limit = Request.Query.limit;
+                int? page = Request.Query.page;
+                var service = new ShopifyOrderService(SessionToken.ShopifyUrl, SessionToken.ShopifyAccessToken);
+                var orders = await service.ListAsync(new ShopifySharp.Filters.ShopifyOrderFilter()
+                {
+                    Limit = limit,
+                    Page = page,
+                });
+
+                return Response.AsJson(orders);
+            };
         }
     }
 

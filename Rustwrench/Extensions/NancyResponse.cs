@@ -21,6 +21,9 @@ namespace Rustwrench
         {
             var token = new SessionToken(user, expirationDays);
 
+            // Never return the token's ShopifyAccessToken to the client
+            token.ShopifyAccessToken = null;
+
             return response.AsJson(token).WithCookie("Rustwrench_Auth", token.token);
         }
 

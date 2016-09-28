@@ -12,6 +12,8 @@ namespace Rustwrench.Interfaces
 
         string ShopifyUrl { get; }
         
+        string ShopifyAccessToken { get; }
+
         string ShopName { get; }
 
         long? ShopId { get; }
