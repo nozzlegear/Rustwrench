@@ -68,7 +68,7 @@ namespace Rustwrench.Routes
                         await service.CreateAsync(new ShopifyWebhook()
                         {
                             Address = url.ToString(),
-                            Topic = ShopifyWebhookTopic.AppUninstalled,
+                            Topic = "app/uninstalled",
                         });
                     }
                     catch (ShopifyException ex) when (ex.Errors.Any(e => e.Key.EqualsIgnoreCase("address") && e.Value.Any(innerError => innerError.ContainsIgnoreCase("for this topic has already been taken"))))
@@ -103,7 +103,7 @@ namespace Rustwrench.Routes
                 var service = new ShopifyRecurringChargeService(user.ShopifyUrl, user.ShopifyAccessToken);
                 var charge = await service.GetAsync(chargeId);
 
-                if (charge.Status != ShopifyChargeStatus.Accepted)
+                if (charge.Status != "accepted")
                 {
                     throw new Exception($"Charge #${charge.Id.Value} has not been accepted.");
                 }
