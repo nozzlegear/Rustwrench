@@ -1,4 +1,7 @@
 $containerPadding: 1.5rem;
+$fontFamily: 'Roboto', sans-serif;
+$appBarHeight: 64px;
+$footerHeight: 166px;
 
 html { 
     /* CSS font-size reset for rem sizing. Makes 1.5rem = 15px, 2rem = 20px, etc. */
@@ -9,6 +12,12 @@ body {
     padding:0;
     margin:0;
     font-size: 1.5rem;
+    color: #444;
+    font-family: $fontFamily;
+}
+
+h1,h2,h3,h4,h5,h6,p,ul,ol,li,span,a,div {
+    font-family: $fontFamily;
 }
 
 container, main {
@@ -60,6 +69,15 @@ main#app{
             font-family: "Lato", "Helvetica Neue", Arial;
             text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.6);
             transition: color 0.25s linear;
+        }
+    }
+
+    &:not(.minimal) {
+        #body {
+            min-height: calc(100vh - #{$appBarHeight} - #{$footerHeight});
+            width: 91.6667%;
+            margin-left: auto;
+            margin-right: auto;
         }
     }
 }
@@ -115,10 +133,7 @@ footer#footer
         
         p
         {
-            &:last-child
-            {
-                margin:0;
-            }
+            margin: 2.5rem;
         }
     }
 }

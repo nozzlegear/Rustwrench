@@ -66,7 +66,7 @@ export default class MainWithNav extends React.Component<IProps, IState> {
         return (
             <MuiThemeProvider>
                 <main id="app"> 
-                    <AppBar onLeftIconButtonTouchTap={e => this.setState({drawerOpen: true})} title={AppName} />
+                    <AppBar onLeftIconButtonTouchTap={e => this.setState({drawerOpen: true})} iconClassNameRight="fa fa-plus" title={AppName} />
                     <div id="body">
                         {React.cloneElement(props.children as any, props)}
                     </div>

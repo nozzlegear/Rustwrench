@@ -2,6 +2,7 @@ import getApiError from "./errors";
 import {SessionToken} from "rustwrench";
 import {resolve, reject} from "bluebird";
 import {AuthState} from "../reducers/auth";
+import {stringify as queryString} from "qs";
 
 export interface ApiResult<T> {
     data: T,
@@ -21,14 +22,14 @@ export default class BaseService {
     constructor(private basePath?: string, private authToken?: string) { }
 
     protected async sendRequest<T>(path: string, method: "POST" | "PUT" | "GET" | "DELETE", data?: any) {
-        const url = `${this.basePath}/${path}`.replace(/\/\/+/i, "/");
+        const url = `${this.basePath}/${path}${method === "GET" ? ("?" + queryString(data)) : ""}`.replace(/\/\/+/i, "/");
         const request = resolve(fetch(url, {
             method: method,
             headers: {
                 "Content-Type": data ? "application/json" : undefined,
                 "x-rustwrench-token": this.authToken || undefined,
             },
-            body: data ? JSON.stringify(data) : undefined,
+            body: (method !== "GET" && data) ? JSON.stringify(data) : undefined,
         }));
 
         let result: Response;
@@ -94,6 +95,10 @@ export class Shopify extends BaseService {
     public createAuthorizationUrl = (data: {url: string; redirectUrl: string}) => this.sendRequest<{url: string}>("create_authorization_url", "POST", data);
 
     public authorize = (data: {code: string, shopUrl: string, fullQueryString: string}) => this.sendRequest<AuthState>("authorize", "POST", data);
+
+    public listOrders = (data: {limit?: number; page?: number;} = {}) => this.sendRequest<any[]>(`orders`, "GET", data);
+
+    public getOrder = (id: number | string) => this.sendRequest<any>(`orders/${id}`, "GET");
 }
 
 export class Sessions extends BaseService{

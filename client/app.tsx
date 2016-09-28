@@ -40,6 +40,7 @@ import HomePage from "./pages/home";
 
 // Styles
 require("./node_modules/purecss/build/pure.css");
+require("./node_modules/typebase.css/typebase.css");
 require("./css/theme.scss");
 
 {

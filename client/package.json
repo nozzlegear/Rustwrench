@@ -93,6 +93,8 @@
     "react-tap-event-plugin": "^1.0.0",
     "redux": "^3.5.2",
     "reqwest": "^2.0.5",
+    "shopify-prime": "^1.4.0",
+    "typebase.css": "^0.5.0",
     "whatwg-fetch": "^1.0.0"
   }
 }
