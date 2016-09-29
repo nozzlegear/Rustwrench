@@ -71,8 +71,6 @@ export default class SignupPage extends AutoPropComponent<IProps, IState> {
             if (!result.ok) {
                 this.setState({loading: false, error: result.error.message});
 
-                console.log("Hit");
-
                 return;
             }
 
@@ -80,8 +78,6 @@ export default class SignupPage extends AutoPropComponent<IProps, IState> {
         }
         catch (e) {
             this.setState({loading: false, error: "Something went wrong and we could not create your account."});
-
-            console.log("Hit 2", e);
 
             return;
         }

@@ -73,7 +73,7 @@ main#app{
     }
 
     &:not(.minimal) {
-        #body {
+        .content {
             min-height: calc(100vh - #{$appBarHeight} - #{$footerHeight});
             width: 91.6667%;
             margin-left: auto;

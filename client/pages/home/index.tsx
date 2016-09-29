@@ -1,6 +1,9 @@
 import * as React from 'react';
+import Nav from "../../components/nav";
 import {Shopify} from "../../modules/api";
 import {IReduxState} from "../../reducers";
+import {CircularProgress} from "material-ui";
+import NewOrderDialog from "./components/new_order_dialog";
 import {
     Table, 
     TableBody, 
@@ -9,7 +12,6 @@ import {
     TableHeaderColumn as TH, 
     TableRowColumn as TD
 } from "material-ui/Table";
-import {CircularProgress, RaisedButton, FontIcon} from "material-ui";
 
 export interface IProps extends IReduxState {
     
@@ -19,6 +21,7 @@ export interface IState {
     orders?: any[];
     loaded?: boolean;
     error?: string;
+    dialogOpen?: boolean;
 }
 
 export default class HomePage extends React.Component<IProps, IState> {
@@ -112,11 +115,15 @@ export default class HomePage extends React.Component<IProps, IState> {
         }
 
         return (
-            <section id="home">
-                <h2>{`Latest Orders for ${this.props.auth.shopName}`}</h2>
-                {body}
-                <p className="error">{this.state.error}</p>
-            </section>
+            <div>
+                <Nav {...this.props} rightIconClass="fa fa-plus" onRightIconTouchTap={e => this.setState({dialogOpen: true})} />
+                <section id="home" className="content">
+                    <h2>{`Latest Orders for ${this.props.auth.shopName}`}</h2>
+                    {body}
+                    <p className="error">{this.state.error}</p>
+                </section>
+                <NewOrderDialog open={this.state.dialogOpen} onRequestClose={() => this.setState({dialogOpen: false})} />
+            </div>
         );
     }
 }

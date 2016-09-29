@@ -24,8 +24,6 @@ import {Actions as AuthActions} from "./reducers/auth";
 
 // Layout components
 import Error from "./pages/error";
-import MainWithNav from "./components/main_with_nav";
-import MainWithoutNav from "./components/main_without_nav";
 
 // Auth components
 import AuthPage from "./pages/auth";
@@ -39,9 +37,50 @@ import FinalizeIntegrationPage from "./pages/signup/finalize";
 import HomePage from "./pages/home";
 
 // Styles
+import {MuiThemeProvider} from "material-ui/styles";
 require("./node_modules/purecss/build/pure.css");
 require("./node_modules/typebase.css/typebase.css");
 require("./css/theme.scss");
+
+// Main app component
+export default function Main(props) {
+    return (
+        <MuiThemeProvider>
+            <main id="app"> 
+                {React.cloneElement(props.children, props)}
+                <footer id="footer">
+                    <div>
+                        <p>
+                            {`© ${AppName}, ${new Date().getUTCFullYear()}. All rights reserved.`}
+                        </p>
+                        <p>
+                            {"Powered by "}
+                            <a target="_blank" href="https://github.com/nozzlegear/rustwrench">
+                                {"Rustwrench"}
+                            </a>
+                            {"."}
+                        </p>
+                    </div>
+                </footer>
+            </main>
+        </MuiThemeProvider>
+    )
+}
+
+export function MinimalMain(props) {
+    return (
+        <MuiThemeProvider>
+            <main id="app" className="minimal"> 
+                <div id="body">
+                    <div className="page-header">
+                        <Link to={Paths.home.index}>{AppName}</Link>
+                    </div>
+                    {React.cloneElement(props.children as any, props)}
+                </div>
+            </main>
+        </MuiThemeProvider>
+    )
+}
 
 {
     function checkAuthState(args: Router.RouterState, replace: Router.RedirectFunction, callback: Function) {
@@ -69,17 +108,17 @@ require("./css/theme.scss");
         return Object.assign({}, state);
     }
 
-    const AppWithNav = connect(mapStateToProps)(MainWithNav);
-    const AppWithoutNav = connect(mapStateToProps)(MainWithoutNav);
+    const App = connect(mapStateToProps)(Main);
+    const MinimalApp = connect(mapStateToProps)(MinimalMain);
     const routes = (    
         <Provider store={store}>
             <Router history={history}>
-                <Route component={AppWithNav}>
+                <Route component={App}>
                     <Route onEnter={checkAuthState} >
                         <Route path={Paths.home.index} component={HomePage} onEnter={args => document.title = AppName} />
                     </Route>
                 </Route>
-                <Route component={AppWithoutNav}>
+                <Route component={MinimalApp}>
                     <Route path={Paths.auth.login} component={AuthPage} onEnter={(args) => {document.title = "Login"}} />
                     <Route path={Paths.signup.index} component={SignupPage} onEnter={args => document.title = "Signup"} />
                     <Route onEnter={checkAuthState}>
