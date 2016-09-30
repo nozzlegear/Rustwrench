@@ -1,4 +1,5 @@
 import * as React from "react";
+import {Link} from "react-router";
 import Paths from "../modules/paths";
 import {IReduxState} from "../reducers";
 import {AppName} from "../modules/strings";
@@ -54,7 +55,15 @@ export default class Nav extends React.Component<IProps, IState> {
     private goToAuth(e: TouchTapEvent) {
         e.preventDefault();
 
-        navigate(this.props.auth.token ? Paths.auth.logout : Paths.auth.login);
+        alert ("GOING TO AUTH");
+
+        //navigate(this.props.auth.token ? Paths.auth.logout : Paths.auth.login);
+    }
+
+    private goToAccount(e: TouchTapEvent) {
+        e.preventDefault();
+
+        alert("HIT");
     }
 
     public componentDidMount() {
@@ -77,13 +86,16 @@ export default class Nav extends React.Component<IProps, IState> {
                 <AppBar title={AppName} onLeftIconButtonTouchTap={e => this.setState({drawerOpen: true})}  iconClassNameRight={props.rightIconClass} onRightIconButtonTouchTap={e => this.onRightIconTouchTap(e)} />
                 <Drawer open={this.state.drawerOpen} docked={false} disableSwipeToOpen={true} onRequestChange={open => this.setState({drawerOpen: open})}>
                     <AppBar onLeftIconButtonTouchTap={e => this.setState({drawerOpen: false})} title={AppName} />
-                    <MenuItem>
-                        {"Hello, world!"}
-                    </MenuItem>
+                    <MenuItem 
+                        containerElement={<Link to={Paths.home.index} />}
+                        primaryText="Dashboard" />
                     <Divider  /> 
-                    <MenuItem href={props.auth.token ? Paths.auth.logout : Paths.auth.login} onTouchTap={e => this.goToAuth(e)}>
-                        {props.auth.token ? "Sign out" : "Sign in"}
-                    </MenuItem>
+                    <MenuItem 
+                        containerElement={<Link to={Paths.account.index} />} 
+                        primaryText="My Account" />
+                    <MenuItem 
+                        containerElement={<Link to={props.auth.token ? Paths.auth.logout : Paths.auth.login} />} 
+                        primaryText={props.auth.token ? "Sign out" : "Sign in"} />
                 </Drawer>
             </div>
         )

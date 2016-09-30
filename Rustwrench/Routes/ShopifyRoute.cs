@@ -9,6 +9,7 @@ using Nancy;
 using Nancy.ModelBinding;
 using Rustwrench.Models.Requests.Shopify;
 using Nancy.Validation;
+using System.Collections.Generic;
 
 namespace Rustwrench.Routes
 {
@@ -51,6 +52,7 @@ namespace Rustwrench.Routes
                 user.ShopifyUrl = model.ShopUrl;
                 user.ShopId = shop.Id;
                 user.ShopName = shop.Name;
+                user.Permissions = Config.ShopifyPermissions;
 
                 // Create an App_Uninstalled webhook if we're not running on localhost
                 if (! Regex.IsMatch(Request.Url.HostName, "localhost", RegexOptions.IgnoreCase))
@@ -121,12 +123,8 @@ namespace Rustwrench.Routes
 
             Post["/create_authorization_url"] = (parameters) =>
             {
-                var permissions = new ShopifyAuthorizationScope[] 
-                {
-                    ShopifyAuthorizationScope.ReadOrders
-                };
                 var model = this.Bind<CreateAuthorizationUrlRequest>();
-                var url = ShopifyAuthorizationService.BuildAuthorizationUrl(permissions, model.Url, Config.ShopifyApiKey, model.RedirectUrl);
+                var url = ShopifyAuthorizationService.BuildAuthorizationUrl(Config.ShopifyPermissions, model.Url, Config.ShopifyApiKey, model.RedirectUrl);
 
                 return Response.AsJson(new 
                 {
@@ -146,6 +144,47 @@ namespace Rustwrench.Routes
                 });
 
                 return Response.AsJson(orders);
+            };
+
+            Post["/orders", true] = async (parameters, ct) =>
+            {
+                var model = this.BindAndValidate<CreateOrderRequest>();
+                
+                if (!ModelValidationResult.IsValid)
+                {
+                    return Response.AsJsonError("Request did not pass validation.", HttpStatusCode.NotAcceptable, ModelValidationResult.FormattedErrors);
+                }
+
+                var service = new ShopifyOrderService(SessionToken.ShopifyUrl, SessionToken.ShopifyAccessToken);
+                var order = await service.CreateAsync(new ShopifyOrder()
+                {
+                    CreatedAt = DateTime.UtcNow,
+                    BillingAddress = new ShopifyAddress()
+                    {
+                        Address1 = model.Street,
+                        City = model.City,
+                        Province = model.State,
+                        //ProvinceCode = "MN",
+                        Zip = model.Zip,
+                        Name = model.Name,
+                        CountryCode = "US",
+                        Default = true,
+                    },
+                    LineItems = new List<ShopifyLineItem>()
+                    {
+                        new ShopifyLineItem()
+                        {
+                            Name = model.LineItem,
+                            Title = model.LineItem,
+                            Quantity = model.Quantity,
+                            Price = 5,
+                        },
+                    },
+                    FinancialStatus = "authorized",
+                    Email = model.Email,
+                });
+
+                return Response.AsJson(order);
             };
         }
     }

@@ -29,6 +29,15 @@ namespace Rustwrench
         public static string ShopifySecretKey { get; } = Get("ShopifySecretKey");
 
         /// <summary>
+        /// A list of permissions that new users must accept to install the app.
+        /// </summary>
+        public static List<string> ShopifyPermissions { get; } = new List<string>()
+        {
+            "write_orders",
+            "read_orders",
+        };
+
+        /// <summary>
         /// Attempts to get a configuration value from the AppSettings.private.env file. If the value is not found, it will then attempt to get it from the App.config file, and then from the environment variables.
         /// If a prefixed value is found, it will take precedence.
         /// </summary>

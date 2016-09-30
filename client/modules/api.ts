@@ -99,6 +99,20 @@ export class Shopify extends BaseService {
     public listOrders = (data: {limit?: number; page?: number;} = {}) => this.sendRequest<any[]>(`orders`, "GET", data);
 
     public getOrder = (id: number | string) => this.sendRequest<any>(`orders/${id}`, "GET");
+
+    public createOrder = (data: any) => this.sendRequest<any>("orders", "POST", data);
+
+    public updateOrder = (id: string | number, data: {
+        name?: string;
+        email?: string;
+        street?: string;
+        city?: string;
+        state?: string;
+        zip?: string;
+        lineItem?: string;
+        quantity?: number;
+        financialStatus?: string;
+    }) => this.sendRequest<any>(`orders/${id}`, "PUT", data);
 }
 
 export class Sessions extends BaseService{

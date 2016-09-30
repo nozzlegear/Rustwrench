@@ -39,6 +39,7 @@
     <Compile Include="Infrastructure\Bootstrapper.cs" />
     <Compile Include="Interfaces\IUser.cs" />
     <Compile Include="Models\Requests\Shopify\AuthorizeRequest.cs" />
+    <Compile Include="Models\Requests\Shopify\CreateOrderRequest.cs" />
     <Compile Include="Models\Requests\Shopify\CreateAuthorizationUrlRequest.cs" />
     <Compile Include="Models\Requests\Shopify\VerifyUrlRequest.cs" />
     <Compile Include="netfx\System\DateTimeEpochExtensions.cs">

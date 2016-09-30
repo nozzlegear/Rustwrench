@@ -72,6 +72,7 @@ main#app{
         }
     }
 
+
     &:not(.minimal) {
         .content {
             min-height: calc(100vh - #{$appBarHeight} - #{$footerHeight});
@@ -79,6 +80,21 @@ main#app{
             margin-left: auto;
             margin-right: auto;
         }
+    }
+}
+
+.sticked-toolbar {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+}
+
+p.error, .error {
+    color: #d50000;
+    margin: 24px 0;
+
+    &.dialog {
+        margin: 24px 0 0 0;
     }
 }
 

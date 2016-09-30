@@ -2,6 +2,9 @@ export const Paths = {
     home: {
         index: "/",
     },
+    account: {
+        index: "/account"
+    },
     auth: {
         login: "/auth/login",
         logout: "/auth/logout",
@@ -52,6 +55,10 @@ export function getPathRegex(path: string) {
 
         case Paths.signup.finalizeIntegration:
             output = /\/signup\/integrate\/finalize\/?$/i;
+        break;
+
+        case Paths.account.index:
+            output = /\/account\/?$/i;
         break;
     }
 

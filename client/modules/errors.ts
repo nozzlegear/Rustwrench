@@ -8,23 +8,23 @@ export default function getApiError(error: Error | Response, bodyText: string, d
         details: undefined
     };
 
-    if (error instanceof Error) {
-        console.error(error.message, error);
-    } else {
+    console.error(new Date().toString(), error);
+
+    if (error instanceof Response) {
         output.unauthorized = error.status === 401;
 
         try {
-            const response: {message: string, details: {key: string, errors: string[]}[] } = JSON.parse(bodyText);
+            const response: {message: string, details: {key: string, errors: string[]}[] } = JSON.parse(bodyText || "{}");
 
             output.message = Array.isArray(response.details) ? response.details.map(e => e.errors.join(", ")).join(", ") : response.message;
             output.details = response.details;
-
-            console.log(response.message, response.details, error);
         } catch (e) {
             console.error("Could not parse response's error JSON.", e, error, bodyText);
 
             output.message = defaultMessage;
         }
+
+        output.message = output.message || defaultMessage;
     }
 
     return output;
