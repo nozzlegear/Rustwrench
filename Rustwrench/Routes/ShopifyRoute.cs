@@ -166,7 +166,6 @@ namespace Rustwrench.Routes
                         Address1 = model.Street,
                         City = model.City,
                         Province = model.State,
-                        //ProvinceCode = "MN",
                         Zip = model.Zip,
                         Name = model.Name,
                         CountryCode = "US",
@@ -186,7 +185,7 @@ namespace Rustwrench.Routes
                     Email = model.Email,
                 });
 
-                return Response.AsJson(order);
+                return Response.AsJson(order).WithStatusCode(HttpStatusCode.Created);
             };
             
             Post["/orders/{id:long}/{verb}", true] = async (parameters, ct) => 
@@ -194,14 +193,14 @@ namespace Rustwrench.Routes
                 string verb = parameters.verb;
                 long id = parameters.id;
 
+                if (!verb.EqualsIgnoreCase("open") && !verb.EqualsIgnoreCase("close"))
+                {
+                    return Negotiate.WithStatusCode(HttpStatusCode.MethodNotAllowed);
+                }
+
                 if (!ModelValidationResult.IsValid)
                 {
                     return Response.AsJsonError("Request did not pass validation.", HttpStatusCode.NotAcceptable, ModelValidationResult.FormattedErrors);
-                }
-
-                if (!verb.EqualsIgnoreCase("open") && !verb.EqualsIgnoreCase("close"))
-                {
-                    return Negotiate.WithStatusCode(405);
                 }
 
                 var service = new ShopifyOrderService(SessionToken.ShopifyUrl, SessionToken.ShopifyAccessToken);
@@ -219,6 +218,16 @@ namespace Rustwrench.Routes
                 var order = await service.GetAsync(id);
 
                 return Response.AsJson(order);
+            };
+
+            Delete["/orders/{id:long}", true] = async (parameters, ct) =>
+            {
+                long id = parameters.id;
+                var service = new ShopifyOrderService(SessionToken.ShopifyUrl, SessionToken.ShopifyAccessToken);
+
+                await service.DeleteAsync(id);
+
+                return Negotiate.WithStatusCode(200);
             };
         }
     }

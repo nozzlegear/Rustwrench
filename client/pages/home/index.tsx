@@ -19,7 +19,6 @@ import {
     IconButton,
     IconMenu,
     Snackbar,
-    TextField
 } from "material-ui";
 import {
     Table, 
@@ -124,6 +123,35 @@ export default class HomePage extends React.Component<IProps, IState> {
             }
         })
     }
+
+    private async deleteOrder(id: number | string) {
+        if (this.state.loading) {
+            return;
+        }
+
+        this.setState({loading: true, selectedRows: []});
+
+        const api = new Shopify(this.props.auth.token);
+        let error: string = undefined;
+        let success = false;
+
+        try {
+            const result = await api.deleteOrder(id);
+
+            success = result.ok;
+            error = result.error && result.error.message;
+        } catch (e) {
+            console.error(e);
+
+            error = "Something went wrong and your order could not be deleted.";
+        }
+
+        this.setState({loading: false, error: error}, () => {
+            if (success) {
+                store.dispatch(Actions.removeOrder(id));
+            }    
+        })
+    }
     
     public async componentDidMount() {
         const api = new Shopify(this.props.auth.token);
@@ -225,11 +253,9 @@ export default class HomePage extends React.Component<IProps, IState> {
                             onTouchTap={e => this.setState({selectedRows: []})}>
                             <SelectAllIcon />
                         </IconButton>
-                        <IconButton 
-                            iconStyle={{color: theme.alternateTextColor}} 
-                            title="Delete">
-                            <DeleteIcon />
-                        </IconButton>
+                        <IconMenu iconButtonElement={<IconButton iconStyle={{color: theme.alternateTextColor}} title="Delete"><DeleteIcon /></IconButton>}>
+                            <MenuItem primaryText="Delete Order" onTouchTap={e => this.deleteOrder(order.id)} />
+                        </IconMenu>
                     </ToolbarGroup>
                 </Toolbar>
             );

@@ -4,7 +4,8 @@ import {Action as IAction} from "rustwrench";
 export type ActionType = (
     "ADD_ORDER" |
     "UPDATE_ORDER" |
-    "SET_ORDERS"
+    "SET_ORDERS" |
+    "REMOVE_ORDER"
 );
 
 export interface State {
@@ -18,14 +19,16 @@ export interface IActions {
     addOrder: (order: any) => Action;
     updateOrder: (id: number | string, order: any) => Action;
     setOrders: (orders: any[]) => Action;
+    removeOrder: (id: number | string) => Action;
 }
 
 export const Actions: IActions = {
     addOrder: (order) => ({
         type: "ADD_ORDER",
         reduce: state => {
+            // Orders are returned by Shopify sorted newest to oldest. Add the newest order to the top of the list
             const orders = [...state.orders];
-            orders.push(order);
+            orders.unshift(order);
 
             return Object.assign({}, state, {orders});
         }  
@@ -46,6 +49,14 @@ export const Actions: IActions = {
     setOrders: (orders) => ({
         type: "SET_ORDERS",
         reduce: state => Object.assign({}, state, {orders, loaded: true})        
+    }),
+    removeOrder: (id) => ({
+        type: "REMOVE_ORDER",
+        reduce: state => {
+            const orders = [ ...state.orders.filter(o => o.id !== id) ]
+
+            return Object.assign({}, state, {orders});
+        }
     })
 }
 
@@ -61,6 +72,7 @@ export default function dashboardReducer(state: State, action: Action) {
         case "ADD_ORDER": 
         case "UPDATE_ORDER":
         case "SET_ORDERS":
+        case "REMOVE_ORDER":
             state = action.reduce(state);
         break;
 

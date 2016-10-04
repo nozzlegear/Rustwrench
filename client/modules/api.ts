@@ -105,6 +105,8 @@ export class Shopify extends BaseService {
     public openOrder = (id: string | number) => this.sendRequest<any>(`orders/${id}/open`, "POST");
 
     public closeOrder = (id: string | number) => this.sendRequest<any>(`orders/${id}/close`, "POST");
+
+    public deleteOrder = (id: string | number) => this.sendRequest<void>(`orders/${id}`, "DELETE");
 }
 
 export class Sessions extends BaseService{
