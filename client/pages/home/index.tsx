@@ -19,6 +19,7 @@ import {
     IconButton,
     IconMenu,
     Snackbar,
+    TextField
 } from "material-ui";
 import {
     Table, 
@@ -92,7 +93,7 @@ export default class HomePage extends React.Component<IProps, IState> {
         }
     }
 
-    private async updateFinancialStatus(id: number | string, status: string) {
+    private async toggleStatus(id: number | string, setStatusTo: "open" | "closed") {
         if (this.state.loading) {
             return;
         }
@@ -104,7 +105,7 @@ export default class HomePage extends React.Component<IProps, IState> {
         let order: any;
 
         try {
-            const result = await api.updateOrder(id, {financialStatus: status});
+            const result = await (setStatusTo === "open" ? api.openOrder(id) : api.closeOrder(id));
 
             if (!result.ok) {
                 error = result.error.message;
@@ -176,7 +177,7 @@ export default class HomePage extends React.Component<IProps, IState> {
                             <TH>{"Id"}</TH>
                             <TH>{"Customer Name"}</TH>
                             <TH>{"Line Item Summary"}</TH>
-                            <TH>{"Financial Status"}</TH>
+                            <TH>{"Status"}</TH>
                         </TR>
                     </TableHeader>
                     <TableBody deselectOnClickaway={false}>
@@ -185,7 +186,7 @@ export default class HomePage extends React.Component<IProps, IState> {
                                 <TD>{o.orderNumber}</TD>
                                 <TD>{`${o.customer.firstName} ${o.customer.lastName}`}</TD>
                                 <TD>{this.getLineDescription(o)}</TD>
-                                <TD>{o.financialStatus}</TD>
+                                <TD>{o.closedAt ? `Closed on ${new Date(o.closedAt).toLocaleDateString("en-US", {month: "short", day: "numeric", year: "numeric"})}` : "Open"}</TD>
                             </TR>
                         ))}
                     </TableBody>
@@ -210,16 +211,11 @@ export default class HomePage extends React.Component<IProps, IState> {
                     style={toolbarStyle}>
                     <ToolbarGroup firstChild={true}>
                         <DropDownMenu 
-                            value={order.financialStatus} 
-                            onChange={(e, i, v) => this.updateFinancialStatus(order.id, v)}
+                            value={!!order.closedAt ? "closed" : "open"}
+                            onChange={(e, i, v) => this.toggleStatus(order.id, order.closedAt ? "open" : "closed")}
                             labelStyle={{color: theme.alternateTextColor}}>
-                            <MenuItem value={"authorized"} primaryText="Authorized" />
-                            <MenuItem value={"paid"} primaryText="Paid" />
-                            <MenuItem value={"pending"} primaryText="Pending" />
-                            <MenuItem value={"partially_paid"} primaryText="Partially Paid" />
-                            <MenuItem value={"partially_refunded"} primaryText="Partially Refunded" />
-                            <MenuItem value={"refunded"} primaryText="Refunded" />
-                            <MenuItem value={"voided"} primaryText="Voided" />
+                            <MenuItem value={"open"} primaryText="Open" />
+                            <MenuItem value={"closed"} primaryText="Closed" />
                         </DropDownMenu>
                     </ToolbarGroup>
                     <ToolbarGroup style={groupStyle}>

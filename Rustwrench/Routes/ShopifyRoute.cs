@@ -136,11 +136,13 @@ namespace Rustwrench.Routes
             {
                 int? limit = Request.Query.limit;
                 int? page = Request.Query.page;
+                string status = Request.Query.status ?? "any";
                 var service = new ShopifyOrderService(SessionToken.ShopifyUrl, SessionToken.ShopifyAccessToken);
                 var orders = await service.ListAsync(new ShopifySharp.Filters.ShopifyOrderFilter()
                 {
                     Limit = limit,
                     Page = page,
+                    Status = "any",
                 });
 
                 return Response.AsJson(orders);
@@ -183,6 +185,38 @@ namespace Rustwrench.Routes
                     FinancialStatus = "authorized",
                     Email = model.Email,
                 });
+
+                return Response.AsJson(order);
+            };
+            
+            Post["/orders/{id:long}/{verb}", true] = async (parameters, ct) => 
+            {
+                string verb = parameters.verb;
+                long id = parameters.id;
+
+                if (!ModelValidationResult.IsValid)
+                {
+                    return Response.AsJsonError("Request did not pass validation.", HttpStatusCode.NotAcceptable, ModelValidationResult.FormattedErrors);
+                }
+
+                if (!verb.EqualsIgnoreCase("open") && !verb.EqualsIgnoreCase("close"))
+                {
+                    return Negotiate.WithStatusCode(405);
+                }
+
+                var service = new ShopifyOrderService(SessionToken.ShopifyUrl, SessionToken.ShopifyAccessToken);
+
+                if (verb.EqualsIgnoreCase("open"))
+                {
+                    await service.OpenAsync(id);
+                }
+                else
+                {
+                    await service.CloseAsync(id);
+                }
+
+                // Refresh the order and return it to the client
+                var order = await service.GetAsync(id);
 
                 return Response.AsJson(order);
             };

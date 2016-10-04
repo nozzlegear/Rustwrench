@@ -102,17 +102,9 @@ export class Shopify extends BaseService {
 
     public createOrder = (data: any) => this.sendRequest<any>("orders", "POST", data);
 
-    public updateOrder = (id: string | number, data: {
-        name?: string;
-        email?: string;
-        street?: string;
-        city?: string;
-        state?: string;
-        zip?: string;
-        lineItem?: string;
-        quantity?: number;
-        financialStatus?: string;
-    }) => this.sendRequest<any>(`orders/${id}`, "PUT", data);
+    public openOrder = (id: string | number) => this.sendRequest<any>(`orders/${id}/open`, "POST");
+
+    public closeOrder = (id: string | number) => this.sendRequest<any>(`orders/${id}/close`, "POST");
 }
 
 export class Sessions extends BaseService{

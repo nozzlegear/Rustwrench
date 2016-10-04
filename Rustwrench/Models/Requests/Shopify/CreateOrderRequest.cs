@@ -24,6 +24,8 @@ namespace Rustwrench.Models.Requests.Shopify
 
         public string LineItem { get; set; }
 
+        public string FinancialStatus { get; set; }
+
         public int Quantity { get; set; }
     }
 
