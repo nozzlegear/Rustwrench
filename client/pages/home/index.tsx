@@ -265,7 +265,7 @@ export default class HomePage extends React.Component<IProps, IState> {
             <div>
                 <Nav {...this.props} rightIconClass="fa fa-plus" onRightIconTouchTap={e => this.setState({dialogOpen: true})} />
                 <section id="home" className="content">
-                    <h2>{`Latest Orders for ${this.props.auth.shopName}`}</h2>
+                    <h2 className="content-title">{`Latest Orders for ${this.props.auth.shopName}`}</h2>
                     {body}
                 </section>
                 {toolbar}

@@ -36,6 +36,9 @@ import FinalizeIntegrationPage from "./pages/signup/finalize";
 // Home components
 import HomePage from "./pages/home";
 
+// Account components
+import AccountPage from "./pages/account";
+
 // Styles
 import {MuiThemeProvider} from "material-ui/styles";
 require("./node_modules/purecss/build/pure.css");
@@ -116,6 +119,7 @@ export function MinimalMain(props) {
                 <Route component={App}>
                     <Route onEnter={checkAuthState} >
                         <Route path={Paths.home.index} component={HomePage} onEnter={args => document.title = AppName} />
+                        <Route path={Paths.account.index} component={AccountPage} onEnter={args => document.title = "Your Account"} />
                     </Route>
                 </Route>
                 <Route component={MinimalApp}>
