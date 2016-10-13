@@ -87,14 +87,14 @@ export default class Nav extends React.Component<IProps, IState> {
                 <Drawer open={this.state.drawerOpen} docked={false} disableSwipeToOpen={true} onRequestChange={open => this.setState({drawerOpen: open})}>
                     <AppBar onLeftIconButtonTouchTap={e => this.setState({drawerOpen: false})} title={AppName} />
                     <MenuItem 
-                        containerElement={<Link to={Paths.home.index} />}
+                        {...{containerElement: <Link to={Paths.home.index} />}}
                         primaryText="Dashboard" />
                     <Divider  /> 
                     <MenuItem 
-                        containerElement={<Link to={Paths.account.index} />} 
+                        {...{containerElement:<Link to={Paths.account.index} />}} 
                         primaryText="My Account" />
                     <MenuItem 
-                        containerElement={<Link to={props.auth.token ? Paths.auth.logout : Paths.auth.login} />} 
+                        {...{containerElement: <Link to={props.auth.token ? Paths.auth.logout : Paths.auth.login} />}} 
                         primaryText={props.auth.token ? "Sign out" : "Sign in"} />
                 </Drawer>
             </div>
