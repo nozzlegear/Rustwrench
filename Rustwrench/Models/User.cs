@@ -18,6 +18,8 @@ namespace Rustwrench.Models
 
         public List<string> Permissions { get; set; } = new List<string>();
 
+        public DateTime DateCreated { get; set; } = DateTime.UtcNow;
+
         /// <summary>
         /// The user's BCrypt-hashed password.
         /// </summary>

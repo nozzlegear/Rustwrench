@@ -28,6 +28,8 @@ declare module "rustwrench" {
         shopifyChargeId?: number;
 
         permissions: string[];
+
+        dateCreated: string;
     }
 
     export interface SessionToken extends IUser {

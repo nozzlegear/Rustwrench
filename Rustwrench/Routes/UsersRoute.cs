@@ -32,6 +32,7 @@ namespace Rustwrench.Routes
                 {
                     UserId = model.Username.ToLower(),
                     HashedPassword = password,
+                    DateCreated = DateTime.UtcNow,
                 };
 
                 var create = await Database.Users.Entities.PutAsync(user);

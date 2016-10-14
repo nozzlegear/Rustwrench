@@ -43,6 +43,8 @@ namespace Rustwrench.Models
 
         public string ShopName { get; set; }
 
+        public DateTime DateCreated { get; set; }
+
         public long? ShopId { get; set; }
 
         public long? ShopifyChargeId { get; set; }

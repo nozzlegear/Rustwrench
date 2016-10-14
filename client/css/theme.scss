@@ -157,3 +157,16 @@ footer#footer
         }
     }
 }
+
+p.underline {
+    padding-bottom:5px;
+    border-bottom: 2px dashed #354b72;
+    margin-bottom:40px;
+
+    &:last-child {
+    }
+
+    > span {
+        float: right;
+    } 
+}

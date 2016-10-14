@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Rustwrench.Interfaces
 {
@@ -19,6 +20,8 @@ namespace Rustwrench.Interfaces
         long? ShopId { get; }
 
         long? ShopifyChargeId { get; }
+
+        DateTime DateCreated { get; }
 
         List<string> Permissions { get; }
     }    
