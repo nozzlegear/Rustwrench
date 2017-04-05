@@ -54,13 +54,5 @@
                 context.Response.WithHeader("X-Rustwrench-Version", Config.AppVersion);
             };
         }
-
-        protected override IRootPathProvider RootPathProvider
-        {
-            get
-            {
-                return new Nancy.Hosting.Aspnet.AspNetRootPathProvider();
-            }
-        }
     }
 }

@@ -60,8 +60,8 @@ namespace Rustwrench
             }
 
             string fromEnvFile = EnvFile.ContainsKey(prefix + key) ? EnvFile[prefix + key] : EnvFile.ContainsKey(key) ? EnvFile[key] : null;
-            string prefixed = ConfigurationManager.AppSettings.Get(prefix + key) ?? Environment.GetEnvironmentVariable(prefix + key);
-            string unprefixed = ConfigurationManager.AppSettings.Get(key) ?? Environment.GetEnvironmentVariable(key); 
+            string prefixed = Environment.GetEnvironmentVariable(prefix + key);
+            string unprefixed = Environment.GetEnvironmentVariable(key); 
 
             return fromEnvFile ?? prefixed ?? unprefixed;
         }
