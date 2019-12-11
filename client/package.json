@@ -68,7 +68,7 @@
     "animate-transition": "github:nozzlegear/animatetransition#19b0452",
     "auto-prop-component": "^1.7.0",
     "bluebird": "^3.4.6",
-    "bootstrap": "^3.3.7",
+    "bootstrap": "^3.4.1",
     "bootstrap-datepicker": "^1.6.1",
     "classnames": "^2.2.5",
     "gravatar": "^1.5.2",
