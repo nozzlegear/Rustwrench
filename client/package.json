@@ -51,7 +51,7 @@
     "style-loader": "^0.13.1",
     "typescript": "^2.0.0",
     "webpack": "^1.13.1",
-    "webpack-dev-server": "^1.14.1"
+    "webpack-dev-server": "^3.1.11"
   },
   "dependencies": {
     "@types/bluebird": "^3.0.35",
