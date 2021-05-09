@@ -72,7 +72,7 @@
     "bootstrap-datepicker": "^1.6.1",
     "classnames": "^2.2.5",
     "gravatar": "^1.5.2",
-    "lodash": "^4.17.13",
+    "lodash": "^4.17.21",
     "material-ui": "^0.15.4",
     "node-uuid": "^1.4.7",
     "purecss": "^0.6.0",
