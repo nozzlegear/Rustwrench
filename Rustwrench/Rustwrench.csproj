@@ -12,7 +12,7 @@
     <PackageReference Include="Microsoft.CSharp" Version="4.3.0" />
     <PackageReference Include="Mono.Posix" Version="4.0.0.0" />
     <PackageReference Include="MyCouch" Version="4.0.0" />
-    <PackageReference Include="Nancy" Version="1.4.3" />
+    <PackageReference Include="Nancy" Version="1.4.4" />
     <PackageReference Include="Nancy.Hosting.Self" Version="1.4.1" />
     <PackageReference Include="Nancy.Validation.FluentValidation" Version="1.4.1" />
     <PackageReference Include="netfx-System.DateTimeEpochExtensions" Version="1.1.0.0" />
